@@ -25,8 +25,9 @@ proyecto/
     ├── css/                           # Estilos
     │   └── styles.css                 # Estilos principales
     ├── js/                            # JavaScript
+    ├── index.jsp                      # Página principal
     ├── login.jsp                      # Página de inicio de sesión
-    └── register.jsp                   # Página de registro
+    └── requirementForm.jsp            # Formulario de requerimientos
 
 ```
 
@@ -82,28 +83,47 @@ proyecto/
   - Ubicación: `css/styles.css`
   - Función: Define los estilos de la aplicación
   - Características:
-    - Diseño responsivo
-    - Paleta de colores corporativa
-    - Estilos de formularios
-    - Animaciones y transiciones
+    - Diseño responsivo con gradientes modernos
+    - Paleta de colores corporativa (azul índigo)
+    - Estilos de formularios con efectos de profundidad
+    - Animaciones y transiciones suaves
+    - Tarjetas interactivas con hover effects
+    - Iconografía con Font Awesome
+    - Diseño centrado en la experiencia del usuario
 
 #### Páginas JSP (`frontend/`)
+- **index.jsp**
+  - Ubicación: `frontend/index.jsp`
+  - Función: Página principal de la aplicación
+  - Características:
+    - Diseño moderno con tarjetas de características
+    - Iconografía descriptiva
+    - Efectos de hover y transiciones suaves
+    - Interfaz intuitiva y atractiva
+    - Sección de características principales
+    - Navegación clara y accesible
+
 - **login.jsp**
   - Ubicación: `frontend/login.jsp`
   - Función: Página de inicio de sesión
   - Características:
-    - Formulario de login
-    - Validación de campos
-    - Manejo de errores
-    - Diseño moderno
+    - Formulario de login con diseño moderno
+    - Iconos intuitivos para cada campo
+    - Validación de campos en tiempo real
+    - Manejo de errores con feedback visual
+    - Opción "Recordar sesión"
+    - Diseño responsivo y accesible
 
-- **register.jsp**
-  - Ubicación: `frontend/register.jsp`
-  - Función: Página de registro de usuarios
+- **requirementForm.jsp**
+  - Ubicación: `frontend/requirementForm.jsp`
+  - Función: Formulario para envío de requerimientos
   - Características:
-    - Formulario de registro
-    - Validación de campos
-    - Feedback visual
+    - Formulario intuitivo y bien estructurado
+    - Campos con iconos descriptivos
+    - Textarea expandible para descripción
+    - Selector de estado con opciones predefinidas
+    - Botones de acción con feedback visual
+    - Validación de campos requeridos
 
 ## 🛠 Tecnologías Utilizadas
 
