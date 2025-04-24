@@ -215,4 +215,3 @@ Este proyecto está bajo la Licencia MIT - ver el archivo LICENSE.md para detall
 
 ---
 
-Desarrollado con ❤️ para Sistemas Transaccionales UMB
