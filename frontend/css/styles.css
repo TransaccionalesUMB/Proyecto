@@ -1,0 +1,141 @@
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a237e 0%, #303f9f 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 20px;
+}
+
+.login {
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.btn-formulario {
+    background-color: #1a237e;
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+    padding: 10px 20px;
+    font-weight: 500;
+}
+
+.btn-formulario:hover {
+    background-color: #303f9f;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.input-group-prepend {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
+}
+
+.input-group-text {
+    background-color: #1a237e;
+    color: white;
+    border: none;
+    width: 46px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px 0 0 8px;
+}
+
+.form-control {
+    height: 48px;
+    padding-left: 56px !important;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px !important;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #1a237e;
+    box-shadow: 0 0 0 0.2rem rgba(26,35,126,0.15);
+    outline: none;
+}
+
+.custom-control-label {
+    color: #666;
+    font-size: 0.9rem;
+    padding-left: 0.5rem;
+}
+
+.alert {
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.login-title {
+    color: #1a237e;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+/* Estilos para el checkbox personalizado */
+.custom-control-input {
+    position: absolute;
+    left: -9999px;
+}
+
+.custom-control {
+    position: relative;
+    padding-left: 1.5rem;
+    cursor: pointer;
+}
+
+.custom-control-label::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #1a237e;
+    border-radius: 3px;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #1a237e;
+}
+
+.custom-control-label::after {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 6px;
+    width: 6px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.custom-control-input:checked ~ .custom-control-label::after {
+    opacity: 1;
+}
