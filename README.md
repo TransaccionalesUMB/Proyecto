@@ -132,6 +132,10 @@ proyecto/
 - Spring Boot 2.5.4
 - Spring Security
 - Spring Data JPA
+- Apache Tomcat 9.0
+  - Servidor de aplicaciones Java
+  - Puerto por defecto: 8080
+  - Gestión de servlets y JSP
 - Hibernate
 - MySQL
 - Maven
