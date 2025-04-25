@@ -70,6 +70,8 @@ proyecto/
 - Spring Security
 - Spring Data JPA
 - MySQL 8.0
+- Apache Tomcat (embebido)
+- Hibernate (incluido en Spring Boot)
 - Maven
 
 ### Frontend
