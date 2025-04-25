@@ -1,5 +1,9 @@
 com\example\transactional\model\User.class
-com\example\transactional\config\DatabaseConfig.class
 com\example\transactional\controller\TestController.class
-com\example\transactional\repository\UserRepository.class
 com\example\transactional\TransactionalApplication.class
+com\example\transactional\service\UserService.class
+com\example\transactional\config\DatabaseConfig.class
+com\example\transactional\controller\LoginController.class
+com\example\transactional\repository\UserRepository.class
+com\example\transactional\config\WebConfig.class
+com\example\transactional\config\SecurityConfig.class

@@ -3,6 +3,38 @@
 ## 📋 Descripción General
 Este proyecto es una aplicación web para la gestión de requerimientos de usuarios, desarrollada con Java Spring Boot en el backend y tecnologías web modernas en el frontend.
 
+## 🚀 Inicio Rápido
+
+### Requisitos Previos
+- Java 8 o superior
+- Maven
+- MySQL 8.0
+- IDE (recomendado: IntelliJ IDEA o Eclipse)
+
+### Configuración de la Base de Datos
+1. Crear una base de datos MySQL llamada `datos_almacen`
+2. Usuario por defecto: `root`
+3. Contraseña por defecto: `2101`
+
+### Ejecución del Proyecto
+1. Clonar el repositorio
+2. Navegar al directorio del backend:
+   ```bash
+   cd backend
+   ```
+3. Ejecutar la aplicación:
+   ```bash
+   mvn clean spring-boot:run
+   ```
+4. Acceder a la aplicación:
+   ```
+   http://localhost:8090/login
+   ```
+
+### Credenciales de Prueba
+- Email: `juan@example.com`
+- Contraseña: `hash123`
+
 ## 📁 Estructura del Proyecto
 
 ```
@@ -28,190 +60,55 @@ proyecto/
     ├── index.jsp                      # Página principal
     ├── login.jsp                      # Página de inicio de sesión
     └── requirementForm.jsp            # Formulario de requerimientos
-
 ```
 
-## 📂 Descripción de Archivos
-
-### Backend
-
-#### Configuración (`backend/src/main/java/com/example/transactional/config/`)
-- **DatabaseConfig.java**
-  - Ubicación: `config/DatabaseConfig.java`
-  - Función: Configura la conexión a la base de datos usando Spring Boot
-  - Detalles: Define el DataSource y las propiedades de conexión
-
-#### Controladores (`backend/src/main/java/com/example/transactional/controller/`)
-- **TestController.java**
-  - Ubicación: `controller/TestController.java`
-  - Función: Proporciona endpoints REST para pruebas
-  - Endpoints:
-    - GET `/test`: Prueba la conexión a la base de datos
-
-#### Modelos (`backend/src/main/java/com/example/transactional/model/`)
-- **User.java**
-  - Ubicación: `model/User.java`
-  - Función: Define la entidad Usuario
-  - Campos:
-    - id: Long (Primary Key)
-    - email: String (único)
-    - password: String
-    - fullName: String
-
-#### Repositorios (`backend/src/main/java/com/example/transactional/repository/`)
-- **UserRepository.java**
-  - Ubicación: `repository/UserRepository.java`
-  - Función: Maneja las operaciones de base de datos para usuarios
-  - Métodos:
-    - findByEmail(): Busca usuario por email
-
-#### Recursos (`backend/src/main/resources/`)
-- **application.properties**
-  - Ubicación: `resources/application.properties`
-  - Función: Configuración de la aplicación
-  - Contiene:
-    - Configuración de base de datos
-    - Configuración de JPA
-    - Configuración del servidor
-    - Configuración de JWT
-    - Configuración de logging
-
-### Frontend
-
-#### Estilos (`frontend/css/`)
-- **styles.css**
-  - Ubicación: `css/styles.css`
-  - Función: Define los estilos de la aplicación
-  - Características:
-    - Diseño responsivo con gradientes modernos
-    - Paleta de colores corporativa (azul índigo)
-    - Estilos de formularios con efectos de profundidad
-    - Animaciones y transiciones suaves
-    - Tarjetas interactivas con hover effects
-    - Iconografía con Font Awesome
-    - Diseño centrado en la experiencia del usuario
-
-#### Páginas JSP (`frontend/`)
-- **index.jsp**
-  - Ubicación: `frontend/index.jsp`
-  - Función: Página principal de la aplicación
-  - Características:
-    - Diseño moderno con tarjetas de características
-    - Iconografía descriptiva
-    - Efectos de hover y transiciones suaves
-    - Interfaz intuitiva y atractiva
-    - Sección de características principales
-    - Navegación clara y accesible
-
-- **login.jsp**
-  - Ubicación: `frontend/login.jsp`
-  - Función: Página de inicio de sesión
-  - Características:
-    - Formulario de login con diseño moderno
-    - Iconos intuitivos para cada campo
-    - Validación de campos en tiempo real
-    - Manejo de errores con feedback visual
-    - Opción "Recordar sesión"
-    - Diseño responsivo y accesible
-
-- **requirementForm.jsp**
-  - Ubicación: `frontend/requirementForm.jsp`
-  - Función: Formulario para envío de requerimientos
-  - Características:
-    - Formulario intuitivo y bien estructurado
-    - Campos con iconos descriptivos
-    - Textarea expandible para descripción
-    - Selector de estado con opciones predefinidas
-    - Botones de acción con feedback visual
-    - Validación de campos requeridos
-
-## 🛠 Tecnologías Utilizadas
+## 🛠️ Tecnologías Utilizadas
 
 ### Backend
 - Java 8
 - Spring Boot 2.5.4
 - Spring Security
 - Spring Data JPA
-- Hibernate
-- MySQL
+- MySQL 8.0
 - Maven
 
 ### Frontend
-- HTML5
+- JSP (JavaServer Pages)
+- Bootstrap 5.1.3
+- Font Awesome 6.0.0
 - CSS3
 - JavaScript
-- Bootstrap 5.1.3
-- Font Awesome (iconos)
-
-## ⚙️ Configuración del Proyecto
-
-### Base de Datos
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/transaccionales
-spring.datasource.username=root
-spring.datasource.password=
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-```
-
-### JPA
-```properties
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
-```
-
-## 🚀 Ejecución del Proyecto
-
-### Backend
-1. Navegar al directorio backend:
-```bash
-cd backend
-```
-
-2. Compilar el proyecto:
-```bash
-mvn clean install
-```
-
-3. Ejecutar el servidor:
-```bash
-mvn spring-boot:run
-```
-
-### Frontend
-1. Asegurarse de que el backend esté corriendo
-2. Acceder a través del navegador:
-```
-http://localhost:8080
-```
 
 ## 🔒 Seguridad
-- Autenticación basada en JWT
-- Contraseñas hasheadas con BCrypt
-- Validación de entrada
-- Protección CSRF
-- Manejo seguro de sesiones
+- Autenticación basada en formularios con Spring Security
+- Protección contra CSRF
+- Sesiones seguras
+- Almacenamiento seguro de contraseñas
 
-## 📝 Convenciones de Código
+## 📝 Características Principales
+1. **Autenticación de Usuarios**
+   - Login seguro
+   - Gestión de sesiones
+   - Recordar sesión
 
-### Java
-- Nombres de clases: PascalCase
-- Nombres de métodos y variables: camelCase
-- Constantes: UPPER_SNAKE_CASE
-- Paquetes: minúsculas
+2. **Gestión de Requerimientos**
+   - Crear nuevos requerimientos
+   - Listar requerimientos existentes
+   - Actualizar estado de requerimientos
+   - Eliminar requerimientos
 
-### Frontend
-- Clases CSS: kebab-case
-- IDs: camelCase
-- Archivos: snake_case
-
-## 👥 Equipo de Desarrollo
-Desarrollado para la asignatura de Sistemas Transaccionales - Universidad Manuela Beltrán
-
----
+## 👥 Contribución
+Para contribuir al proyecto:
+1. Fork el repositorio
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
 
 ## 📄 Licencia
-Este proyecto está bajo la Licencia MIT - ver el archivo LICENSE.md para detalles
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
 
----
-
+## ✨ Agradecimientos
+- Universidad Manuela Beltrán
+- Equipo de desarrollo
+- Contribuidores
