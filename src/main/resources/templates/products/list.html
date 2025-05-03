@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Inventario - StockMaster</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e67e22;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background-color: var(--primary-color) !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--light-color) !important;
+        }
+        
+        .nav-link {
+            color: var(--light-color) !important;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem !important;
+            margin: 0 0.25rem;
+            border-radius: 5px;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: var(--secondary-color);
+            color: white !important;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .card-header {
+            background-color: var(--secondary-color);
+            color: white;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border: none;
+        }
+        
+        .card-title {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .card-header .card-title {
+            color: white;
+            margin-bottom: 0;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .form-control {
+            border: 2px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+        }
+        
+        .btn-primary {
+            background-color: var(--accent-color);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #d35400;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            border: none;
+            transition: all 0.2s;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline-light:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .table {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .table thead {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .table thead th {
+            font-weight: 600;
+            padding: 1rem;
+            border: none;
+        }
+        
+        .table tbody tr:nth-child(even) {
+            background-color: rgba(236, 240, 241, 0.5);
+        }
+        
+        .table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-color: #eee;
+        }
+        
+        .page-header {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .alert {
+            border: none;
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            font-weight: 500;
+        }
+        
+        .footer {
+            margin-top: 3rem;
+            padding: 2rem 0;
+            background-color: var(--primary-color);
+            color: var(--light-color);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/home">
+                <i class="fas fa-boxes-stacked me-2"></i>
+                StockMaster
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/home">
+                            <i class="fas fa-home me-1"></i> Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/products">
+                            <i class="fas fa-box-open me-1"></i> Productos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/manage-users">
+                            <i class="fas fa-users-cog me-1"></i> Gestionar Usuarios
+                        </a>
+                    </li>
+                </ul>
+                <form th:action="@{/logout}" method="post" class="d-flex">
+                    <button class="btn btn-outline-light" type="submit">
+                        <i class="fas fa-sign-out-alt me-1"></i> Cerrar Sesión
+                    </button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="page-header d-flex justify-content-between align-items-center">
+            <div>
+                <h2><i class="fas fa-boxes me-2"></i>Gestión de Inventario</h2>
+                <p class="mb-0 lead">Administre el inventario de su almacén</p>
+            </div>
+            <a href="/home" class="btn btn-light btn-lg">
+                <i class="fas fa-home me-1"></i> Volver al Inicio
+            </a>
+        </div>
+
+        <!-- Mensajes de alerta -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Formulario de nuevo producto -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-plus-circle me-2"></i>Registrar Nuevo Producto
+                </h5>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/products/create}" method="post" th:object="${newProduct}">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="name" class="form-label">
+                                <i class="fas fa-tag me-1"></i>Nombre
+                            </label>
+                            <input type="text" class="form-control" id="name" th:field="*{name}" 
+                                   placeholder="Nombre del producto" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="description" class="form-label">
+                                <i class="fas fa-align-left me-1"></i>Descripción
+                            </label>
+                            <input type="text" class="form-control" id="description" th:field="*{description}" 
+                                   placeholder="Descripción breve" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="price" class="form-label">
+                                <i class="fas fa-dollar-sign me-1"></i>Precio
+                            </label>
+                            <input type="number" step="0.01" class="form-control" id="price" th:field="*{price}" 
+                                   placeholder="0.00" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="categoryId" class="form-label">
+                                <i class="fas fa-sitemap me-1"></i>Categoría
+                            </label>
+                            <select class="form-select" id="categoryId" th:field="*{categoryId}">
+                                <option value="" selected>-- Seleccione una categoría --</option>
+                                <option th:each="category : ${categories}" 
+                                        th:value="${category.id}" 
+                                        th:text="${category.name}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="providerId" class="form-label">
+                                <i class="fas fa-truck me-1"></i>Proveedor
+                            </label>
+                            <select class="form-select" id="providerId" th:field="*{providerId}">
+                                <option value="" selected>-- Seleccione un proveedor --</option>
+                                <option th:each="provider : ${providers}" 
+                                        th:value="${provider.id}" 
+                                        th:text="${provider.name}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="stock" class="form-label">
+                                <i class="fas fa-cubes me-1"></i>Stock
+                            </label>
+                            <input type="number" class="form-control" id="stock" th:field="*{stock}" 
+                                   placeholder="Cantidad disponible" required>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-save me-1"></i>Registrar Producto
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Lista de productos -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-list me-2"></i>Productos en Inventario
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th><i class="fas fa-hashtag me-1"></i>ID</th>
+                                <th><i class="fas fa-tag me-1"></i>Nombre</th>
+                                <th><i class="fas fa-align-left me-1"></i>Descripción</th>
+                                <th><i class="fas fa-dollar-sign me-1"></i>Precio</th>
+                                <th><i class="fas fa-sitemap me-1"></i>Categoría</th>
+                                <th><i class="fas fa-truck me-1"></i>Proveedor</th>
+                                <th><i class="fas fa-cubes me-1"></i>Stock</th>
+                                <th><i class="fas fa-cogs me-1"></i>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="product : ${products}">
+                                <td th:text="${product.id}"></td>
+                                <td th:text="${product.name}"></td>
+                                <td th:text="${product.description}"></td>
+                                <td>
+                                    <span class="fw-bold" th:text="${'$' + product.price}"></span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary" th:text="${product.categoryId != null ? product.categoryId : '-'}"></span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info text-dark" th:text="${product.providerId != null ? product.providerId : '-'}"></span>
+                                </td>
+                                <td>
+                                    <span th:class="${product.stock > 10 ? 'badge bg-success' : (product.stock > 0 ? 'badge bg-warning text-dark' : 'badge bg-danger')}" 
+                                          th:text="${product.stock != null ? product.stock : '0'}"></span>
+                                </td>
+                                <td>
+                                    <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="fas fa-boxes-stacked me-2"></i>StockMaster</h5>
+                    <p>Gestión eficiente de inventario y productos.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>&copy; 2025 StockMaster</p>
+                    <p>Todos los derechos reservados</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

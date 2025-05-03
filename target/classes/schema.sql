@@ -1,0 +1,22 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- Crear tabla de usuarios
+DROP TABLE IF EXISTS usuarios;
+CREATE TABLE usuarios (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL,
+    rol VARCHAR(20) NOT NULL
+);
+
+-- Crear tabla de users
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL,
+    full_name VARCHAR(100)
+);
+
+SET FOREIGN_KEY_CHECKS = 1;

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockMaster</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a237e;
+            --primary-light: #534bae;
+            --primary-dark: #000051;
+            --secondary-color: #0288d1;
+            --secondary-light: #5eb8ff;
+            --secondary-dark: #005b9f;
+            --accent-color: #ff6f00;
+            --accent-light: #ffa040;
+            --accent-dark: #c43e00;
+            --light-color: #f5f5f5;
+            --dark-color: #212121;
+            --success-color: #43a047;
+            --danger-color: #e53935;
+            --warning-color: #ffb300;
+            --info-color: #039be5;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(120deg, var(--light-color), #e0e0e0);
+            min-height: 100vh;
+            padding-bottom: 60px;
+            position: relative;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 0.8rem 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
+            letter-spacing: 0.5px;
+        }
+        
+        .navbar-brand i {
+            color: var(--accent-light);
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85) !important;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 0.6rem 1rem !important;
+            margin: 0 0.25rem;
+            border-radius: 4px;
+            position: relative;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: white !important;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 10%;
+            width: 80%;
+            height: 3px;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+        }
+        
+        .btn-outline-light {
+            border-width: 2px;
+            font-weight: 500;
+            padding: 0.5rem 1.2rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-outline-light:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .main-container {
+            padding: 2.5rem 0;
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark));
+            color: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dashboard-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffffff20"><path d="M20 4L4 20M4 4L20 20"/></svg>');
+            background-repeat: repeat;
+            opacity: 0.1;
+            transform: rotate(15deg);
+        }
+        
+        .dashboard-header h1 {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+        
+        .dashboard-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 80%;
+        }
+        
+        .feature-card {
+            height: 100%;
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: white;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .feature-card:hover .card-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .card-body {
+            padding: 2.5rem 2rem;
+            text-align: center;
+        }
+        
+        .card-icon {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s;
+        }
+        
+        .card-title {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .card-text {
+            color: #666;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+        
+        .btn-feature {
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-dark));
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-weight: 600;
+            border-radius: 30px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(var(--accent-dark), 0.3);
+        }
+        
+        .btn-feature:hover {
+            background: linear-gradient(135deg, var(--accent-dark), var(--accent-color));
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(var(--accent-dark), 0.4);
+        }
+        
+        .btn-feature i {
+            margin-left: 8px;
+            transition: transform 0.3s;
+        }
+        
+        .btn-feature:hover i {
+            transform: translateX(4px);
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+            color: white;
+            padding: 2rem 0;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        .footer-brand {
+            font-weight: 700;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .footer-brand i {
+            color: var(--accent-light);
+            margin-right: 0.5rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        .copyright {
+            background-color: rgba(0, 0, 0, 0.2);
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .dashboard-header h1 {
+                font-size: 2rem;
+            }
+            
+            .dashboard-header p {
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .feature-card {
+                margin-bottom: 2rem;
+            }
+            
+            .dashboard-header {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/" data-bs-toggle="tooltip" data-bs-placement="bottom" title="StockMaster">
+                <i class="fas fa-boxes-stacked me-2"></i>
+                StockMaster
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/home" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Panel principal">
+                            <i class="fas fa-home me-1"></i> Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Gestión de inventario">
+                            <i class="fas fa-box-open me-1"></i> Productos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/manage-users" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Administración de usuarios">
+                            <i class="fas fa-users-cog me-1"></i> Gestionar Usuarios
+                        </a>
+                    </li>
+                </ul>
+                <a href="/login" class="btn btn-outline-light" data-bs-toggle="tooltip" data-bs-placement="left" title="Acceder al sistema">
+                    <i class="fas fa-sign-in-alt me-1"></i> Iniciar Sesión
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="container">
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <h1><i class="fas fa-warehouse me-2"></i>Bienvenido al StockMaster</h1>
+                <p class="lead">Administre su inventario de manera eficiente, gestione usuarios y obtenga informes detallados sobre el rendimiento de su almacén.</p>
+            </div>
+            
+            <!-- Feature Cards -->
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="card-body">
+                            <div class="card-icon">
+                                <i class="fas fa-boxes"></i>
+                            </div>
+                            <h5 class="card-title">Gestión de Inventario</h5>
+                            <p class="card-text">Añada, modifique o elimine productos. Controle su stock, categorías y precios desde un panel intuitivo.</p>
+                            <a href="/products" class="btn btn-feature">
+                                Gestionar Productos <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="card-body">
+                            <div class="card-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h5 class="card-title">Gestión de Usuarios</h5>
+                            <p class="card-text">Administre los permisos, roles y accesos de los usuarios del sistema según sus responsabilidades.</p>
+                            <a href="/admin/manage-users" class="btn btn-feature">
+                                Gestionar Usuarios <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="card-body">
+                            <div class="card-icon">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <h5 class="card-title">Reportes y Estadísticas</h5>
+                            <p class="card-text">Genere informes detallados sobre inventario, ventas, movimientos y rendimiento del almacén.</p>
+                            <a href="/reports" class="btn btn-feature">
+                                Ver Reportes <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="footer-brand">
+                        <i class="fas fa-boxes-stacked"></i>
+                        StockMaster
+                    </div>
+                    <p class="mt-3">Solución completa para la gestión eficiente de inventario y almacenes.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Enlaces Rápidos</h5>
+                    <ul class="footer-links">
+                        <li><a href="/"><i class="fas fa-home me-1"></i> Inicio</a></li>
+                        <li><a href="/products"><i class="fas fa-box-open me-1"></i> Productos</a></li>
+                        <li><a href="/login"><i class="fas fa-sign-in-alt me-1"></i> Iniciar Sesión</a></li>
+                        <li><a href="#"><i class="fas fa-question-circle me-1"></i> Ayuda</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contacto</h5>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-envelope me-1"></i> soporte@almacen.com</li>
+                        <li><i class="fas fa-phone me-1"></i> +57 300 123 4567</li>
+                        <li><i class="fas fa-map-marker-alt me-1"></i> Bogotá, Colombia</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <div class="container">
+                &copy; 2025 StockMaster. Todos los derechos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Inicializar tooltips
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+</body>
+</html>
