@@ -7,9 +7,13 @@ public class ProductDto {
     private String name;
     private String description;
     private BigDecimal price;
-    private Integer categoryId;
-    private Integer providerId;
+    private String categoryId;
+    private String providerId;
     private Integer stock;
+    private String sku;
+    private String categoryName;
+    private String providerName;
+    private Integer quantity;
     
     // Getters and Setters
     public Integer getId() {
@@ -44,19 +48,19 @@ public class ProductDto {
         this.price = price;
     }
     
-    public Integer getCategoryId() {
+    public String getCategoryId() {
         return categoryId;
     }
     
-    public void setCategoryId(Integer categoryId) {
+    public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
     }
     
-    public Integer getProviderId() {
+    public String getProviderId() {
         return providerId;
     }
     
-    public void setProviderId(Integer providerId) {
+    public void setProviderId(String providerId) {
         this.providerId = providerId;
     }
     
@@ -66,5 +70,37 @@ public class ProductDto {
     
     public void setStock(Integer stock) {
         this.stock = stock;
+    }
+    
+    public String getSku() {
+        return sku;
+    }
+    
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+    
+    public String getCategoryName() {
+        return categoryName;
+    }
+    
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+    
+    public String getProviderName() {
+        return providerName;
+    }
+    
+    public void setProviderName(String providerName) {
+        this.providerName = providerName;
+    }
+    
+    public Integer getQuantity() {
+        return quantity;
+    }
+    
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.transactional.controller;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,30 +13,34 @@ public class LoginController {
     @GetMapping("/login")
     public String login(@RequestParam(value = "error", required = false) String error,
                        @RequestParam(value = "logout", required = false) String logout,
-                       Model model,
-                       Authentication authentication) {
+                       Model model) {
         
-        if (authentication != null && authentication.isAuthenticated()) {
+        // Verificar si el usuario ya está autenticado
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && 
+            !authentication.getName().equals("anonymousUser")) {
+            System.out.println("Usuario ya autenticado: " + authentication.getName() + ", redirigiendo a /home");
             return "redirect:/home";
         }
 
+        // Manejar mensajes de error
         if (error != null) {
-            model.addAttribute("error", "Usuario o contraseña inválidos");
+            System.out.println("Error de login detectado");
+            model.addAttribute("error", "Usuario o contraseña inválidos. Por favor, inténtelo de nuevo.");
         }
 
+        // Manejar mensajes de cierre de sesión
         if (logout != null) {
+            System.out.println("Logout detectado");
             model.addAttribute("message", "Has cerrado sesión correctamente");
         }
 
+        System.out.println("Mostrando página de login");
         return "login";
     }
     
-    // Este método se ha eliminado para evitar conflictos con HomeController
-    // @GetMapping("/home")
-    // public String home(Authentication authentication) {
-    //     if (authentication == null || !authentication.isAuthenticated()) {
-    //         return "redirect:/login";
-    //     }
-    //     return "home";
-    // }
+    @GetMapping("/access-denied")
+    public String accessDenied() {
+        return "access-denied";
+    }
 }

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Navegación</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- StockMaster Theme CSS -->
+    <link th:href="@{/css/stockmaster-theme.css}" rel="stylesheet">
+</head>
+<body>
+    <!-- Barra de navegación principal -->
+    <nav th:fragment="main-nav" class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/home}">
+                <i class="fas fa-boxes-stacked me-2"></i>StockMaster
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active' : ''}" 
+                           th:href="@{/home}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Panel principal">
+                            <i class="fas fa-home"></i> Inicio
+                        </a>
+                    </li>
+                    
+                    <!-- Productos - Visible para usuarios con permiso GESTIONAR_PRODUCTOS -->
+                    <li class="nav-item dropdown" th:if="${canViewProducts != null && canViewProducts}">
+                        <a class="nav-link dropdown-toggle" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/products') ? 'active' : ''}" 
+                           href="#" id="productosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-box-open"></i> Productos
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="productosDropdown">
+                            <li><a class="dropdown-item" th:href="@{/products/list}"><i class="fas fa-boxes"></i> Gestionar Inventario</a></li>
+                            <li><a class="dropdown-item" th:href="@{/products/add}"><i class="fas fa-plus-circle"></i> Añadir Producto</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/admin/categories}"><i class="fas fa-tags"></i> Categorías</a></li>
+                            <li><a class="dropdown-item" th:href="@{/admin/providers}"><i class="fas fa-truck"></i> Proveedores</a></li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Inventario - Visible para usuarios con permiso GESTIONAR_INVENTARIO -->
+                    <li class="nav-item dropdown" th:if="${canViewInventory != null && canViewInventory}">
+                        <a class="nav-link dropdown-toggle" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/inventario') ? 'active' : ''}" 
+                           href="#" id="inventarioDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-warehouse"></i> Inventario
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="inventarioDropdown">
+                            <li><a class="dropdown-item" th:href="@{/inventario}"><i class="fas fa-boxes"></i> Estado del Inventario</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/inventario/entradas}"><i class="fas fa-arrow-down"></i> Registrar Entradas</a></li>
+                            <li><a class="dropdown-item" th:href="@{/inventario/salidas}"><i class="fas fa-arrow-up"></i> Registrar Salidas</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/inventario/movimientos}"><i class="fas fa-exchange-alt"></i> Movimientos</a></li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Reportes - Visible para usuarios con permiso VER_REPORTES -->
+                    <li class="nav-item dropdown" th:if="${canViewReports != null && canViewReports}">
+                        <a class="nav-link dropdown-toggle" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/reports') ? 'active' : ''}" 
+                           th:href="@{/reports}" id="reportesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-chart-bar"></i> Reportes
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="reportesDropdown">
+                            <li><a class="dropdown-item" th:href="@{/reports}"><i class="fas fa-chart-line"></i> Panel de Reportes</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/reports/stock}"><i class="fas fa-boxes"></i> Reporte de Stock</a></li>
+                            <li><a class="dropdown-item" th:href="@{/reports/movements}"><i class="fas fa-exchange-alt"></i> Movimientos</a></li>
+                            <li><a class="dropdown-item" th:href="@{/reports/expiration}"><i class="fas fa-calendar-times"></i> Caducidad</a></li>
+                            <li><a class="dropdown-item" th:href="@{/reports/low-stock}"><i class="fas fa-exclamation-triangle"></i> Productos con Bajo Stock</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/reports/marketing}"><i class="fas fa-chart-line"></i> Estadísticas de Marketing</a></li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Administración - Visible solo para administradores -->
+                    <li class="nav-item dropdown" th:if="${isAdmin != null && isAdmin}">
+                        <a class="nav-link dropdown-toggle" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin') ? 'active' : ''}" 
+                           href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-cog"></i> Administración
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                            <li><a class="dropdown-item" th:href="@{/admin/users}"><i class="fas fa-users"></i> Gestión de Usuarios</a></li>
+                            <li><a class="dropdown-item" th:href="@{/admin/roles}"><i class="fas fa-user-tag"></i> Roles y Permisos</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/admin/almacenes}"><i class="fas fa-warehouse"></i> Gestión de Almacenes</a></li>
+                            <li><a class="dropdown-item" th:href="@{/admin/bodegas}"><i class="fas fa-store"></i> Gestión de Bodegas</a></li>
+                            <li><a class="dropdown-item" th:href="@{/admin/ubicaciones}"><i class="fas fa-map-marker-alt"></i> Gestión de Ubicaciones</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/admin/system-config}"><i class="fas fa-sliders-h"></i> Configuración del Sistema</a></li>
+                            <li><a class="dropdown-item" th:href="@{/admin/audit-log}"><i class="fas fa-history"></i> Registro de Auditoría</a></li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Mi Cuenta - Visible solo para CLIENTE -->
+                    <li class="nav-item dropdown" th:if="${isCliente != null && isCliente}">
+                        <a class="nav-link dropdown-toggle" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/cliente') ? 'active' : ''}" 
+                           th:href="@{#}" id="clienteDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user corporate-icon"></i> Mi Cuenta
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="clienteDropdown">
+                            <li><a class="dropdown-item" th:href="@{/cliente/pedidos}">Mis Pedidos</a></li>
+                            <li><a class="dropdown-item" th:href="@{/cliente/perfil}">Mi Perfil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/cliente/catalogo}">Catálogo de Productos</a></li>
+                            <li><a class="dropdown-item" th:href="@{/cliente/soporte}">Soporte</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <!-- Información del usuario y botón de logout -->
+                <div class="navbar-nav">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" th:href="@{#}" id="userDropdown" role="button" 
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle"></i>
+                            <span th:text="${userName ?: 'Usuario'}">Usuario</span>
+                            <span class="user-badge ms-1" th:text="${userRole ?: 'Usuario'}">Rol</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" th:href="@{/profile}"><i class="fas fa-id-card"></i> Mi Perfil</a></li>
+                            <li><a class="dropdown-item" th:href="@{/change-password}"><i class="fas fa-key"></i> Cambiar Contraseña</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Barra de navegación lateral para panel de administración -->
+    <nav th:fragment="admin-sidebar" class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+        <div class="sb-sidenav-menu">
+            <div class="nav">
+                <div class="sb-sidenav-menu-heading">Principal</div>
+                <a class="nav-link" th:href="@{/home}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
+                    Inicio
+                </a>
+                
+                <div class="sb-sidenav-menu-heading">Administración</div>
+                <a class="nav-link" th:href="@{/admin/manage-users}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                    Usuarios
+                </a>
+                <a class="nav-link" th:href="@{/admin/roles}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-user-tag"></i></div>
+                    Roles
+                </a>
+                
+                <div class="sb-sidenav-menu-heading">Inventario</div>
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseAlmacenes" aria-expanded="false" aria-controls="collapseAlmacenes">
+                    <div class="sb-nav-link-icon"><i class="fas fa-warehouse"></i></div>
+                    Almacenes
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseAlmacenes" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" th:href="@{/admin/almacenes}">Gestionar Almacenes</a>
+                        <a class="nav-link" th:href="@{/admin/ubicaciones}">Gestionar Ubicaciones</a>
+                    </nav>
+                </div>
+                
+                <div class="sb-sidenav-menu-heading">Sistema</div>
+                <a class="nav-link" th:href="@{/admin/settings}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-cogs"></i></div>
+                    Configuración
+                </a>
+                <a class="nav-link" th:href="@{/admin/logs}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
+                    Registros
+                </a>
+            </div>
+        </div>
+        <div class="sb-sidenav-footer">
+            <div class="small">Conectado como:</div>
+            <span th:text="${userRole ?: 'Administrador'}">Administrador</span>
+        </div>
+    </nav>
+</body>
+</html>

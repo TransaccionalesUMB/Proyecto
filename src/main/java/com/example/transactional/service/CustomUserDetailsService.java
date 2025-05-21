@@ -38,16 +38,42 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con email: " + email));
+        try {
+            System.out.println("Intentando autenticar usuario: " + email);
+            
+            // Buscar usuario en la base de datos
+            Usuario usuario = usuarioRepository.findByEmail(email)
+                    .orElseThrow(() -> {
+                        System.err.println("Usuario no encontrado en la base de datos: " + email);
+                        return new UsernameNotFoundException("Usuario no encontrado con email: " + email);
+                    });
 
-        // Obtener el nombre del rol según el id_rol
-        String rolName = ROLES_MAP.getOrDefault(usuario.getIdRol(), "USER");
-        
-        return new User(
-                usuario.getEmail(),
-                usuario.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + rolName))
-        );
+            System.out.println("Usuario encontrado en la base de datos: " + usuario.getEmail());
+            System.out.println("Contraseña almacenada: " + usuario.getPassword());
+            
+            // Verificar que el usuario tenga un rol asignado
+            if (usuario.getIdRol() == null) {
+                System.err.println("Usuario " + email + " no tiene un rol asignado. Asignando rol USER por defecto.");
+                return new User(
+                    usuario.getEmail(),
+                    usuario.getPassword(),
+                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+                );
+            }
+            
+            // Obtener el nombre del rol según el id_rol
+            String rolName = ROLES_MAP.getOrDefault(usuario.getIdRol(), "USER");
+            System.out.println("Usuario " + email + " autenticado con rol: " + rolName);
+            
+            return new User(
+                    usuario.getEmail(),
+                    usuario.getPassword(),
+                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + rolName))
+            );
+        } catch (Exception e) {
+            System.err.println("Error al cargar usuario " + email + ": " + e.getMessage());
+            e.printStackTrace();
+            throw new UsernameNotFoundException("Error al cargar usuario: " + e.getMessage(), e);
+        }
     }
 }

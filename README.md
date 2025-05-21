@@ -1,116 +1,93 @@
-# Sistema de Gestión de Requerimientos - Documentación
+# StockMaster
 
-## 📋 Descripción General
-Este proyecto es una aplicación web para la gestión de requerimientos de usuarios, desarrollada con Java Spring Boot en el backend y tecnologías web modernas en el frontend.
+![Logo](https://img.icons8.com/color/96/000000/warehouse.png)
 
-## 🚀 Inicio Rápido
+## ¿Qué es StockMaster?
 
-### Requisitos Previos
-- Java 8 o superior
-- Maven
-- MySQL 8.0
-- IDE (recomendado: IntelliJ IDEA o Eclipse)
+StockMaster nació de la necesidad de tener un sistema sencillo pero potente para gestionar inventarios. Si alguna vez has trabajado con Excel para llevar el control de tus productos, sabes lo frustrante que puede ser. Este proyecto busca resolver ese problema.
 
-### Configuración de la Base de Datos
-1. Crear una base de datos MySQL llamada `datos_almacen`
-2. Usuario por defecto: `root`
-3. Contraseña por defecto: `2101`
+Creamos una aplicación web con Spring Boot que te permite manejar productos, categorías, proveedores y ver reportes de forma intuitiva. Lo mejor es que implementamos un sistema de roles para que cada persona de tu equipo tenga acceso solo a lo que necesita.
 
-### Ejecución del Proyecto
-1. Clonar el repositorio
-2. Navegar al directorio del backend:
-   ```bash
-   cd backend
-   ```
-3. Ejecutar la aplicación:
-   ```bash
-   mvn clean spring-boot:run
-   ```
-4. Acceder a la aplicación:
-   ```
-   http://localhost:8090/login
-   ```
+## Cómo empezar
 
-### Credenciales de Prueba
-- Email: `juan@example.com`
-- Contraseña: `hash123`
+Necesitarás tener instalado:
+- Java 8 o más reciente
+- Maven para las dependencias
+- MySQL para la base de datos
+- Un navegador actualizado
 
-## 📁 Estructura del Proyecto
+Para la base de datos:
+- Crea una BD llamada `datos_almacen`
+- Usuario: `root`
+- Contraseña: `root`
 
-```
-proyecto/
-├── backend/                           # Código del servidor
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/
-│   │   │   │   └── com/
-│   │   │   │       └── example/
-│   │   │   │           └── transactional/
-│   │   │   │               ├── config/         # Configuraciones
-│   │   │   │               ├── controller/     # Controladores REST
-│   │   │   │               ├── model/          # Entidades
-│   │   │   │               └── repository/     # Repositorios JPA
-│   │   │   └── resources/              # Recursos y configuraciones
-│   │   └── test/                       # Pruebas unitarias
-│   └── pom.xml                        # Configuración Maven
-└── frontend/                          # Código del cliente
-    ├── css/                           # Estilos
-    │   └── styles.css                 # Estilos principales
-    ├── js/                            # JavaScript
-    ├── index.jsp                      # Página principal
-    ├── login.jsp                      # Página de inicio de sesión
-    └── requirementForm.jsp            # Formulario de requerimientos
-```
+Para arrancar el proyecto es súper fácil:
+1. Clona el repo
+2. Ejecuta `stockmaster.bat`
+3. Abre tu navegador en `http://localhost:8080`
 
-## 🛠️ Tecnologías Utilizadas
+El script se encarga de todo: verifica la conexión a la BD, libera el puerto si está ocupado, limpia cachés, compila y arranca la aplicación.
 
-### Backend
-- Java 8
-- Spring Boot 2.5.4
-- Spring Security
-- Spring Data JPA
-- MySQL 8.0
-- Apache Tomcat (embebido)
-- Hibernate (incluido en Spring Boot)
-- Maven
+Para probar el sistema, puedes usar:
+- Email: `admin@test.com`
+- Contraseña: `admin123`
 
-### Frontend
-- JSP (JavaServer Pages)
-- Bootstrap 5.1.3
-- Font Awesome 6.0.0
-- CSS3
-- JavaScript
+## Lo que encontrarás dentro
 
-## 🔒 Seguridad
-- Autenticación basada en formularios con Spring Security
-- Protección contra CSRF
-- Sesiones seguras
-- Almacenamiento seguro de contraseñas
+El proyecto está organizado de forma bastante estándar para una aplicación Spring Boot:
 
-## 📝 Características Principales
-1. **Autenticación de Usuarios**
-   - Login seguro
-   - Gestión de sesiones
-   - Recordar sesión
+- **Controladores**: Manejan las peticiones web (HomeController, ProductController, etc.)
+- **Modelos**: Definen las entidades como Product, Category, Usuario
+- **Repositorios**: Para acceder a la base de datos
+- **Servicios**: Donde está la lógica de negocio
+- **Plantillas**: Vistas en Thymeleaf para la interfaz de usuario
 
-2. **Gestión de Requerimientos**
-   - Crear nuevos requerimientos
-   - Listar requerimientos existentes
-   - Actualizar estado de requerimientos
-   - Eliminar requerimientos
+Hemos usado tecnologías que nos facilitan el desarrollo y que son bastante comunes en el ecosistema Java:
+- Spring Boot como framework principal
+- Spring Security para la autenticación y control de acceso
+- JPA/Hibernate para la persistencia
+- Thymeleaf para las vistas
+- Bootstrap y algo de JavaScript para que se vea bonito
 
-## 👥 Contribución
-Para contribuir al proyecto:
-1. Fork el repositorio
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+## Roles de usuario
 
-## 📄 Licencia
-Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
+Uno de los puntos fuertes de StockMaster es su sistema de roles:
 
-## ✨ Agradecimientos
-- Universidad Manuela Beltrán
-- Equipo de desarrollo
-- Contribuidores
+- **Administrador**: Puede hacer de todo. Es el superusuario.
+- **Operador**: Maneja el inventario y puede ver reportes, pero no gestiona usuarios.
+- **Auditor**: Solo puede ver reportes, ideal para supervisores o contadores.
+- **Cliente**: Tiene acceso a su área personal (funcionalidad en desarrollo).
+
+## Lo que puedes hacer con StockMaster
+
+### Gestión de inventario
+Añadir productos nuevos, editar los existentes, asignarles categorías y proveedores, y controlar el stock. El sistema te avisa cuando algún producto está por agotarse.
+
+### Gestión de usuarios
+Si eres administrador, puedes crear cuentas para tu equipo y asignarles el rol adecuado según sus responsabilidades.
+
+### Reportes
+Tenemos un dashboard con los datos más importantes a simple vista y reportes más detallados para cuando necesites profundizar.
+
+### Interfaz amigable
+Diseñamos la interfaz pensando en la facilidad de uso. Es responsive, así que funciona bien tanto en tu PC como en tablets.
+
+## Scripts útiles
+
+Hemos incluido algunos scripts para hacerte la vida más fácil:
+
+- `stockmaster.bat`: El principal, que arranca todo el sistema
+- `limpiar-innecesarios.bat`: Para cuando quieras hacer limpieza
+
+## Actualizaciones recientes
+
+### Mayo 2025 - Mejoras del sistema
+
+#### Rendimiento y mantenimiento
+- Optimización general del proyecto para mejorar velocidad y estabilidad
+- Actualización de la estructura de datos para un acceso más eficiente
+
+#### Interfaz de usuario
+- Mejoras en el menú de perfil de usuario
+- Rediseño de la página de inicio para una experiencia más intuitiva
+- Simplificación de formularios y pantallas de edición

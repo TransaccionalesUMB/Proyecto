@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
@@ -19,20 +18,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
+    
+    @Autowired
+    private FlexiblePasswordEncoder flexiblePasswordEncoder;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // Usar NoOpPasswordEncoder para almacenar contraseñas sin encriptar
-        return NoOpPasswordEncoder.getInstance();
+        // Usar el codificador flexible que puede manejar diferentes formatos
+        return flexiblePasswordEncoder;
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        // Configuración para que el userDetailsService use el passwordEncoder
+        // Primero intentar autenticar con el servicio de usuarios de la base de datos
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
         
-        // Agregar usuario en memoria para pruebas en caso de problemas con la BD
-        // La contraseña ya no está codificada
+        // Luego, si falla, intentar con el usuario en memoria para pruebas
         auth.inMemoryAuthentication()
             .withUser("admin@test.com")
             .password("admin123")
@@ -65,6 +66,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
             .csrf()
-                .disable();
+                .disable()
+            .exceptionHandling()
+                .accessDeniedPage("/access-denied");
     }
 }

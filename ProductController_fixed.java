@@ -1,0 +1,129 @@
+package com.example.transactional.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.example.transactional.dto.ProductDto;
+import com.example.transactional.model.Product;
+import com.example.transactional.repository.CategoryRepository;
+import com.example.transactional.repository.ProviderRepository;
+import com.example.transactional.service.ProductService;
+import java.util.List;
+import java.util.Optional;
+
+@Controller
+@RequestMapping("/products")
+public class ProductController {
+
+    @Autowired
+    private ProductService productService;
+    
+    @Autowired
+    private CategoryRepository categoryRepository;
+    
+    @Autowired
+    private ProviderRepository providerRepository;
+
+    @GetMapping("/list")
+    public String listProducts(Model model) {
+        try {
+            model.addAttribute("products", productService.getAllProductsWithStock());
+            // Añadir atributos para la navegación
+            model.addAttribute("isAdmin", true);
+            model.addAttribute("canViewInventory", true);
+            model.addAttribute("canViewReports", true);
+            model.addAttribute("canViewProducts", true);
+            model.addAttribute("canViewUsers", true);
+            return "products/list";
+        } catch (Exception e) {
+            // Manejar errores
+            model.addAttribute("error", "Hubo un problema al cargar los productos: " + e.getMessage());
+            // Añadir atributos para la navegación
+            model.addAttribute("isAdmin", true);
+            model.addAttribute("canViewInventory", true);
+            model.addAttribute("canViewReports", true);
+            model.addAttribute("canViewProducts", true);
+            model.addAttribute("canViewUsers", true);
+            return "products/list";
+        }
+    }
+    
+    @GetMapping("/add")
+    public String showAddProductForm(Model model) {
+        model.addAttribute("product", new ProductDto());
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("providers", providerRepository.findAll());
+        return "products/add";
+    }
+
+    @PostMapping("/create")
+    public String createProduct(@ModelAttribute ProductDto productDto, RedirectAttributes redirectAttributes) {
+        try {
+            // Validar que los campos requeridos estén presentes
+            if (productDto.getName() == null || productDto.getName().trim().isEmpty()) {
+                throw new RuntimeException("El nombre del producto es obligatorio");
+            }
+            
+            if (productDto.getPrice() == null) {
+                throw new RuntimeException("El precio del producto es obligatorio");
+            }
+            
+            // Asignar valores predeterminados para categoría y proveedor si están vacíos
+            if (productDto.getCategoryId() == null) {
+                productDto.setCategoryId(1); // Categoría General por defecto (ID 1)
+            }
+            
+            if (productDto.getProviderId() == null) {
+                productDto.setProviderId(1); // Proveedor General por defecto (ID 1)
+            }
+            
+            productService.saveProductWithStock(productDto);
+            redirectAttributes.addFlashAttribute("success", "Producto creado exitosamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al crear el producto: " + e.getMessage());
+        }
+        return "redirect:/products";
+    }
+    
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable Integer id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            Optional<ProductDto> productOpt = productService.getProductById(id);
+            if (productOpt.isPresent()) {
+                model.addAttribute("product", productOpt.get());
+                model.addAttribute("categories", categoryRepository.findAll());
+                model.addAttribute("providers", providerRepository.findAll());
+                return "products/edit";
+            } else {
+                redirectAttributes.addFlashAttribute("error", "No se encontró el producto con ID: " + id);
+                return "redirect:/products";
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al obtener el producto: " + e.getMessage());
+            return "redirect:/products";
+        }
+    }
+    
+    @PostMapping("/update")
+    public String updateProduct(@ModelAttribute ProductDto productDto, RedirectAttributes redirectAttributes) {
+        try {
+            // Asignar valores predeterminados para categoría y proveedor si están vacíos
+            if (productDto.getCategoryId() == null) {
+                productDto.setCategoryId(1); // Categoría General por defecto (ID 1)
+            }
+            
+            if (productDto.getProviderId() == null) {
+                productDto.setProviderId(1); // Proveedor General por defecto (ID 1)
+            }
+            
+            productService.updateProduct(productDto);
+            redirectAttributes.addFlashAttribute("success", "Producto actualizado exitosamente");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al actualizar el producto: " + e.getMessage());
+        }
+        return "redirect:/products";
+    }
+}

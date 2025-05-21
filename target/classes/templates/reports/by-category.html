@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte por Categoría - StockMaster</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a237e;
+            --primary-light: #534bae;
+            --primary-dark: #000051;
+            --secondary-color: #0288d1;
+            --secondary-light: #5eb8ff;
+            --secondary-dark: #005b9f;
+            --accent-color: #ff6f00;
+            --accent-light: #ffa040;
+            --accent-dark: #c43e00;
+            --light-color: #f5f5f5;
+            --dark-color: #212121;
+            --success-color: #43a047;
+            --danger-color: #e53935;
+            --warning-color: #ffb300;
+            --info-color: #039be5;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(120deg, var(--light-color), #e0e0e0);
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background-color: var(--primary-color) !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--light-color) !important;
+        }
+        .category-card {
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .category-card:hover {
+            transform: translateY(-5px);
+        }
+        .category-icon {
+            font-size: 2rem;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+        .category-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .category-stock {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .category-products {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .export-buttons {
+            margin-bottom: 15px;
+        }
+        .export-buttons .btn {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/home">
+                <i class="fas fa-boxes-stacked me-2"></i>StockMaster
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="fas fa-home me-1"></i>Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products/list"><i class="fas fa-box me-1"></i>Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/inventario"><i class="fas fa-warehouse me-1"></i>Inventario</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" id="reportesDropdown" role="button" 
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-chart-bar me-1"></i>Reportes
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="reportesDropdown">
+                            <li><a class="dropdown-item" href="/reports/inventory">Inventario Completo</a></li>
+                            <li><a class="dropdown-item active" href="/reports/by-category">Stock por Categoría</a></li>
+                            <li><a class="dropdown-item" href="/reports/by-provider">Stock por Proveedor</a></li>
+                            <li><a class="dropdown-item" href="/reports/low-stock">Productos con Bajo Stock</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/reports/marketing">Estadísticas de Marketing</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">Reporte de Stock por Categoría</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="/reports">Reportes</a></li>
+                <li class="breadcrumb-item active">Por Categoría</li>
+            </ol>
+            
+            <!-- Botones de exportación -->
+            <div class="export-buttons">
+                <button class="btn btn-success" id="exportExcel">
+                    <i class="fas fa-file-excel me-1"></i> Exportar a Excel
+                </button>
+                <button class="btn btn-danger" id="exportPdf">
+                    <i class="fas fa-file-pdf me-1"></i> Exportar a PDF
+                </button>
+                <button class="btn btn-info" id="printReport">
+                    <i class="fas fa-print me-1"></i> Imprimir
+                </button>
+            </div>
+            
+            <!-- Gráfico de distribución por categoría -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-chart-pie me-1"></i>
+                    Distribución de Stock por Categoría
+                </div>
+                <div class="card-body">
+                    <canvas id="categoryDistributionChart" width="100%" height="40"></canvas>
+                </div>
+            </div>
+            
+            <!-- Tarjetas de categorías -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="mb-4">Resumen por Categoría</h2>
+                </div>
+                
+                <div class="col-xl-3 col-md-6" th:each="entry : ${stockByCategory}">
+                    <div class="category-card bg-light">
+                        <div class="text-center">
+                            <div class="category-icon">
+                                <i class="fas fa-tag"></i>
+                            </div>
+                            <div class="category-title" th:text="${categoryNames.get(entry.key)}">Categoría</div>
+                            <div class="category-stock" th:text="${entry.value}">0</div>
+                            <div class="category-products">unidades en stock</div>
+                            <a th:href="@{'/reports/inventory?category=' + ${entry.key}}" class="btn btn-primary mt-3">
+                                Ver Productos
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tabla detallada por categoría -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-table me-1"></i>
+                    Detalle por Categoría
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="categoryTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Categoría</th>
+                                    <th>Cantidad de Productos</th>
+                                    <th>Stock Total</th>
+                                    <th>Valor Estimado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Iteramos sobre cada categoría -->
+                                <tr th:each="entry : ${stockByCategory}">
+                                    <td th:text="${categoryNames.get(entry.key)}">Categoría</td>
+                                    <td th:text="${products.stream().filter(p -> p.getCategoryId() == entry.key).count()}">0</td>
+                                    <td th:text="${entry.value}">0</td>
+                                    <td>$0.00</td>
+                                    <td>
+                                        <a th:href="@{'/reports/inventory?category=' + ${entry.key}}" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-eye"></i> Ver
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scripts para inicializar DataTables y gráficos -->
+        <script th:inline="javascript">
+            $(document).ready(function() {
+                // Inicializar DataTable
+                $('#categoryTable').DataTable({
+                    pageLength: 10,
+                    lengthMenu: [10, 25, 50, 100],
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                    }
+                });
+                
+                // Exportar a Excel (simulado)
+                $('#exportExcel').click(function() {
+                    alert('Función de exportación a Excel en desarrollo');
+                });
+                
+                // Exportar a PDF (simulado)
+                $('#exportPdf').click(function() {
+                    alert('Función de exportación a PDF en desarrollo');
+                });
+                
+                // Imprimir reporte
+                $('#printReport').click(function() {
+                    window.print();
+                });
+                
+                // Datos para el gráfico de distribución por categoría
+                var stockByCategory = /*[[${stockByCategory}]]*/ {};
+                var categoryNames = /*[[${categoryNames}]]*/ {};
+                
+                var labels = [];
+                var data = [];
+                var backgroundColors = ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#5a5c69'];
+                
+                var i = 0;
+                for (var key in stockByCategory) {
+                    if (stockByCategory.hasOwnProperty(key)) {
+                        labels.push(categoryNames[key]);
+                        data.push(stockByCategory[key]);
+                    }
+                }
+                
+                var ctx = document.getElementById('categoryDistributionChart').getContext('2d');
+                var categoryDistributionChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: backgroundColors,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        tooltips: {
+                            backgroundColor: "rgb(255,255,255)",
+                            bodyFontColor: "#858796",
+                            borderColor: '#dddfeb',
+                            borderWidth: 1,
+                            xPadding: 15,
+                            yPadding: 15,
+                            displayColors: false,
+                            caretPadding: 10,
+                        },
+                        legend: {
+                            display: true,
+                            position: 'bottom'
+                        },
+                        cutoutPercentage: 0,
+                    }
+                });
+            });
+        </script>
+        </div>
+    </div>
+
+    <footer class="footer mt-5 py-3 bg-dark text-white">
+        <div class="container text-center">
+            <span>© 2025 StockMaster - Sistema de Gestión de Inventario</span>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script th:inline="javascript">
+        $(document).ready(function() {
+            // Inicializar DataTable
+            $('#categoryTable').DataTable({
+                pageLength: 10,
+                lengthMenu: [10, 25, 50, 100],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                }
+            });
+            
+            // Exportar a Excel (simulado)
+            $('#exportExcel').click(function() {
+                alert('Función de exportación a Excel en desarrollo');
+            });
+            
+            // Exportar a PDF (simulado)
+            $('#exportPdf').click(function() {
+                alert('Función de exportación a PDF en desarrollo');
+            });
+            
+            // Imprimir reporte
+            $('#printReport').click(function() {
+                window.print();
+            });
+            
+            // Datos para el gráfico de distribución por categoría
+            var stockByCategory = /*[[${stockByCategory}]]*/ {};
+            var categoryNames = /*[[${categoryNames}]]*/ {};
+            
+            var labels = [];
+            var data = [];
+            var backgroundColors = ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#5a5c69'];
+            
+            var i = 0;
+            for (var key in stockByCategory) {
+                if (stockByCategory.hasOwnProperty(key)) {
+                    labels.push(categoryNames[key]);
+                    data.push(stockByCategory[key]);
+                }
+            }
+            
+            var ctx = document.getElementById('categoryDistributionChart').getContext('2d');
+            var categoryDistributionChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: backgroundColors,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    var label = context.label || '';
+                                    var value = context.raw || 0;
+                                    var total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    var percentage = Math.round((value / total) * 100);
+                                    return label + ': ' + value + ' unidades (' + percentage + '%)';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

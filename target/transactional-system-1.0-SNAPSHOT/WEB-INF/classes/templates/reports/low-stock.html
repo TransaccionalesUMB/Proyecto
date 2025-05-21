@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos con Bajo Stock - StockMaster</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a237e;
+            --primary-light: #534bae;
+            --primary-dark: #000051;
+            --secondary-color: #0288d1;
+            --secondary-light: #5eb8ff;
+            --secondary-dark: #005b9f;
+            --accent-color: #ff6f00;
+            --accent-light: #ffa040;
+            --accent-dark: #c43e00;
+            --light-color: #f5f5f5;
+            --dark-color: #212121;
+            --success-color: #43a047;
+            --danger-color: #e53935;
+            --warning-color: #ffb300;
+            --info-color: #039be5;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(120deg, var(--light-color), #e0e0e0);
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background-color: var(--primary-color) !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--light-color) !important;
+        }
+        .alert-section {
+            background-color: #f8d7da;
+            border-left: 5px solid #e74a3b;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .export-buttons {
+            margin-bottom: 15px;
+        }
+        .export-buttons .btn {
+            margin-right: 10px;
+        }
+        .stock-critical {
+            color: #e74a3b;
+            font-weight: bold;
+        }
+        .stock-warning {
+            color: #f6c23e;
+            font-weight: bold;
+        }
+        .action-required {
+            background-color: #ffe8e8;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/home">
+                <i class="fas fa-boxes-stacked me-2"></i>StockMaster
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="fas fa-home me-1"></i>Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products/list"><i class="fas fa-box me-1"></i>Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/inventario"><i class="fas fa-warehouse me-1"></i>Inventario</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" id="reportesDropdown" role="button" 
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-chart-bar me-1"></i>Reportes
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="reportesDropdown">
+                            <li><a class="dropdown-item" href="/reports/inventory">Inventario Completo</a></li>
+                            <li><a class="dropdown-item" href="/reports/by-category">Stock por Categoría</a></li>
+                            <li><a class="dropdown-item" href="/reports/by-provider">Stock por Proveedor</a></li>
+                            <li><a class="dropdown-item active" href="/reports/low-stock">Productos con Bajo Stock</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/reports/marketing">Estadísticas de Marketing</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">Productos con Bajo Stock</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="/reports">Reportes</a></li>
+                <li class="breadcrumb-item active">Bajo Stock</li>
+            </ol>
+            
+            <!-- Alerta de bajo stock -->
+            <div class="alert-section">
+                <div class="d-flex align-items-center">
+                    <div class="me-3">
+                        <i class="fas fa-exclamation-triangle fa-2x text-danger"></i>
+                    </div>
+                    <div>
+                        <h4 class="alert-heading">¡Atención! Productos con Bajo Stock</h4>
+                        <p class="mb-0">Se han detectado <span th:text="${products.size()}" class="fw-bold">0</span> productos con niveles de stock por debajo del umbral mínimo (10 unidades). Se recomienda realizar pedidos para reabastecer estos productos.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Botones de exportación -->
+            <div class="export-buttons">
+                <button class="btn btn-success" id="exportExcel">
+                    <i class="fas fa-file-excel me-1"></i> Exportar a Excel
+                </button>
+                <button class="btn btn-danger" id="exportPdf">
+                    <i class="fas fa-file-pdf me-1"></i> Exportar a PDF
+                </button>
+                <button class="btn btn-info" id="printReport">
+                    <i class="fas fa-print me-1"></i> Imprimir
+                </button>
+                <button class="btn btn-warning" id="generateOrders">
+                    <i class="fas fa-shopping-cart me-1"></i> Generar Pedidos
+                </button>
+            </div>
+            
+            <!-- Tabla de productos con bajo stock -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-exclamation-circle me-1"></i>
+                    Productos con Bajo Stock
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="lowStockTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Categoría</th>
+                                    <th>Proveedor</th>
+                                    <th>Stock Actual</th>
+                                    <th>Stock Mínimo</th>
+                                    <th>Recomendación</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="product : ${products}" th:if="${product.id != null}" th:class="${product.stock < 5 ? 'action-required' : ''}">
+                                    <td th:text="${product.id}">1</td>
+                                    <td th:text="${product.name}">Producto</td>
+                                    <td th:text="${product.categoryId}">Categoría</td>
+                                    <td th:text="${product.providerId}">Proveedor</td>
+                                    <td th:class="${product.stock < 5 ? 'stock-critical' : 'stock-warning'}" th:text="${product.stock}">0</td>
+                                    <td>10</td>
+                                    <td th:text="${product.stock < 5 ? 'Pedir inmediatamente' : 'Considerar reabastecimiento'}">Recomendación</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary order-btn" th:data-id="${product.id}" th:data-name="${product.name}">
+                                            <i class="fas fa-cart-plus"></i> Pedir
+                                        </button>
+                                        <a th:href="@{'/products/edit/' + ${product.id}}" class="btn btn-sm btn-secondary">
+                                            <i class="fas fa-edit"></i> Editar
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Gráficos de análisis -->
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-chart-pie me-1"></i>
+                            Distribución por Categoría
+                        </div>
+                        <div class="card-body">
+                            <canvas id="lowStockCategoryChart" width="100%" height="50"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-chart-bar me-1"></i>
+                            Niveles de Stock Crítico
+                        </div>
+                        <div class="card-body">
+                            <canvas id="criticalLevelsChart" width="100%" height="50"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal para crear pedido -->
+        <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="orderModalLabel">Crear Pedido</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="orderForm">
+                            <input type="hidden" id="productId" name="productId">
+                            <div class="mb-3">
+                                <label for="productName" class="form-label">Producto</label>
+                                <input type="text" class="form-control" id="productName" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="quantity" class="form-label">Cantidad a Pedir</label>
+                                <input type="number" class="form-control" id="quantity" name="quantity" min="1" value="20">
+                            </div>
+                            <div class="mb-3">
+                                <label for="urgency" class="form-label">Urgencia</label>
+                                <select class="form-control" id="urgency" name="urgency">
+                                    <option value="normal">Normal</option>
+                                    <option value="urgent">Urgente</option>
+                                    <option value="critical">Crítica</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="notes" class="form-label">Notas</label>
+                                <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="submitOrder">Crear Pedido</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scripts para inicializar DataTables y gráficos -->
+        <script>
+            $(document).ready(function() {
+                // Inicializar DataTable
+                $('#lowStockTable').DataTable({
+                    pageLength: 10,
+                    lengthMenu: [10, 25, 50, 100],
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                    }
+                });
+                
+                // Exportar a Excel (simulado)
+                $('#exportExcel').click(function() {
+                    alert('Función de exportación a Excel en desarrollo');
+                });
+                
+                // Exportar a PDF (simulado)
+                $('#exportPdf').click(function() {
+                    alert('Función de exportación a PDF en desarrollo');
+                });
+                
+                // Imprimir reporte
+                $('#printReport').click(function() {
+                    window.print();
+                });
+                
+                // Generar pedidos (simulado)
+                $('#generateOrders').click(function() {
+                    alert('Función de generación automática de pedidos en desarrollo');
+                });
+                
+                // Abrir modal de pedido
+                $('.order-btn').click(function() {
+                    var productId = $(this).data('id');
+                    var productName = $(this).data('name');
+                    
+                    $('#productId').val(productId);
+                    $('#productName').val(productName);
+                    
+                    $('#orderModal').modal('show');
+                });
+                
+                // Enviar pedido (simulado)
+                $('#submitOrder').click(function() {
+                    alert('Pedido creado correctamente (simulado)');
+                    $('#orderModal').modal('hide');
+                });
+                
+                // Datos para gráficos (ejemplo)
+                var ctx1 = document.getElementById('lowStockCategoryChart').getContext('2d');
+                var lowStockCategoryChart = new Chart(ctx1, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Electrónicos', 'Oficina', 'Muebles', 'General'],
+                        datasets: [{
+                            data: [3, 2, 1, 4],
+                            backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e'],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        tooltips: {
+                            backgroundColor: "rgb(255,255,255)",
+                            bodyFontColor: "#858796",
+                            borderColor: '#dddfeb',
+                            borderWidth: 1,
+                            xPadding: 15,
+                            yPadding: 15,
+                            displayColors: false,
+                            caretPadding: 10,
+                        },
+                        legend: {
+                            display: true,
+                            position: 'bottom'
+                        },
+                        cutoutPercentage: 0,
+                    }
+                });
+                
+                var ctx2 = document.getElementById('criticalLevelsChart').getContext('2d');
+                var criticalLevelsChart = new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Crítico (0-4)', 'Bajo (5-9)'],
+                        datasets: [{
+                            label: 'Cantidad de Productos',
+                            data: [3, 7],
+                            backgroundColor: ['#e74a3b', '#f6c23e'],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            });
+        </script>
+        </div>
+    </div>
+
+    <footer class="footer mt-5 py-3 bg-dark text-white">
+        <div class="container text-center">
+            <span>© 2025 StockMaster - Sistema de Gestión de Inventario</span>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Inicializar DataTable
+            $('#lowStockTable').DataTable({
+                pageLength: 10,
+                lengthMenu: [10, 25, 50, 100],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                }
+            });
+            
+            // Exportar a Excel (simulado)
+            $('#exportExcel').click(function() {
+                alert('Función de exportación a Excel en desarrollo');
+            });
+            
+            // Exportar a PDF (simulado)
+            $('#exportPdf').click(function() {
+                alert('Función de exportación a PDF en desarrollo');
+            });
+            
+            // Imprimir reporte
+            $('#printReport').click(function() {
+                window.print();
+            });
+            
+            // Abrir modal de pedido
+            $('.order-btn').click(function() {
+                var productId = $(this).data('product-id');
+                var productName = $(this).data('product-name');
+                var currentStock = $(this).data('current-stock');
+                
+                $('#orderProductId').val(productId);
+                $('#orderProductName').text(productName);
+                $('#orderCurrentStock').text(currentStock);
+                
+                $('#orderModal').modal('show');
+            });
+            
+            // Gráficos
+            var ctx1 = document.getElementById('stockLevelChart').getContext('2d');
+            var stockLevelChart = new Chart(ctx1, {
+                type: 'pie',
+                data: {
+                    labels: ['Crítico (0-5)', 'Bajo (6-10)', 'Medio (11-20)'],
+                    datasets: [{
+                        data: [5, 8, 12],
+                        backgroundColor: ['#e74a3b', '#f6c23e', '#36b9cc'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        }
+                    }
+                }
+            });
+            
+            var ctx2 = document.getElementById('categoryLowStockChart').getContext('2d');
+            var categoryLowStockChart = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ['Electrónicos', 'Oficina', 'Muebles', 'General'],
+                    datasets: [{
+                        label: 'Productos con Bajo Stock',
+                        data: [3, 5, 2, 4],
+                        backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

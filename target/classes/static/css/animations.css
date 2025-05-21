@@ -1,0 +1,249 @@
+/**
+ * StockMaster Animations
+ * Animaciones y transiciones sutiles para mejorar la experiencia de usuario
+ */
+
+/* Transiciones básicas */
+.transition-standard {
+    transition: all 0.3s ease;
+}
+
+/* Animación de entrada para tarjetas */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+/* Animación de entrada para elementos de lista */
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.animate-fade-in-left {
+    animation: fadeInLeft 0.5s ease forwards;
+}
+
+/* Animación para hover en tarjetas */
+.card-hover-effect {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover-effect:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Animación para botones */
+.btn-animate {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.btn-animate:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.3);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+
+.btn-animate:hover:after {
+    animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    20% {
+        transform: scale(25, 25);
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(40, 40);
+    }
+}
+
+/* Animación para notificaciones */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.animate-pulse {
+    animation: pulse 2s infinite;
+}
+
+/* Animación para elementos de carga */
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-rotate {
+    animation: rotate 1.5s linear infinite;
+}
+
+/* Animación para alertas */
+@keyframes slideInDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.alert-animated {
+    animation: slideInDown 0.5s ease forwards;
+}
+
+/* Animación para cambios de estado */
+@keyframes highlight {
+    0% {
+        background-color: transparent;
+    }
+    20% {
+        background-color: rgba(15, 98, 254, 0.1);
+    }
+    100% {
+        background-color: transparent;
+    }
+}
+
+.highlight-change {
+    animation: highlight 1.5s ease;
+}
+
+/* Animación para menús desplegables */
+.dropdown-menu {
+    transform-origin: top;
+    animation: scaleIn 0.3s ease forwards;
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scaleY(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scaleY(1);
+    }
+}
+
+/* Animación para tabs */
+.tab-pane.active {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Animación para tooltips */
+.tooltip {
+    transition: opacity 0.3s ease;
+}
+
+/* Animación para badges */
+.badge-animated {
+    transition: all 0.3s ease;
+}
+
+.badge-animated:hover {
+    transform: scale(1.1);
+}
+
+/* Animación para iconos */
+.icon-animated {
+    transition: transform 0.3s ease;
+}
+
+.icon-animated:hover {
+    transform: scale(1.2);
+}
+
+/* Animación para elementos de navegación */
+.nav-item {
+    transition: background-color 0.3s ease;
+}
+
+/* Animación para tablas */
+.table-row-animated {
+    transition: background-color 0.3s ease;
+}
+
+.table-row-animated:hover {
+    background-color: rgba(15, 98, 254, 0.05);
+}
+
+/* Animación para modales */
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out;
+    transform: translate(0, -50px);
+}
+
+.modal.show .modal-dialog {
+    transform: none;
+}
+
+/* Animación para paginación */
+.page-item {
+    transition: transform 0.3s ease;
+}
+
+.page-item:hover {
+    transform: translateY(-2px);
+}
+
+/* Delay en cascada para listas */
+.delay-item-1 { animation-delay: 0.1s; }
+.delay-item-2 { animation-delay: 0.2s; }
+.delay-item-3 { animation-delay: 0.3s; }
+.delay-item-4 { animation-delay: 0.4s; }
+.delay-item-5 { animation-delay: 0.5s; }

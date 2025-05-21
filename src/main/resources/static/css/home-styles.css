@@ -1,0 +1,239 @@
+/* Estilos para la página de inicio */
+:root {
+    /* Colores principales inspirados en SAP */
+    --primary-color: #0f62fe;       /* Azul principal, similar al de SAP */
+    --primary-light: #78a9ff;       /* Azul claro para elementos secundarios */
+    --primary-dark: #0043ce;        /* Azul oscuro para hover */
+    --secondary-color: #393939;     /* Gris oscuro para texto y elementos secundarios */
+    --secondary-light: #525252;     /* Gris medio para bordes y separadores */
+    --secondary-lighter: #f4f4f4;   /* Gris muy claro para fondos */
+    --accent-color: #24a148;        /* Verde para éxito y elementos positivos */
+    --accent-light: #42be65;        /* Verde claro */
+    --accent-dark: #0e8a2e;         /* Verde oscuro */
+    --light-color: #f4f4f4;         /* Gris muy claro para fondos */
+    --dark-color: #161616;          /* Negro para texto principal */
+    --success-color: #24a148;       /* Verde para éxito */
+    --danger-color: #da1e28;        /* Rojo para errores y alertas */
+    --warning-color: #f1c21b;       /* Amarillo para advertencias */
+    --info-color: #1192e8;          /* Azul claro para información */
+}
+
+body {
+    font-family: 'IBM Plex Sans', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--light-color);
+    min-height: 100vh;
+    padding-bottom: 60px;
+    position: relative;
+}
+
+.navbar {
+    background-color: var(--white, #ffffff);
+    color: var(--secondary-color);
+    padding: 0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid var(--secondary-lighter);
+}
+
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: var(--primary-color);
+    padding: 1rem 1rem;
+}
+
+.navbar-brand i {
+    color: var(--accent-light);
+}
+
+.navbar-nav .nav-link {
+    color: var(--secondary-color);
+    padding: 1rem 1rem;
+    font-weight: 500;
+}
+
+.navbar-nav .nav-link.active {
+    color: var(--primary-color);
+    background-color: rgba(15, 98, 254, 0.05);
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--primary-dark);
+    background-color: rgba(15, 98, 254, 0.05);
+}
+
+.corporate-icon {
+    color: var(--primary-light);
+    margin-right: 0.25rem;
+}
+
+.main-container {
+    padding: 2rem 0;
+}
+
+.corporate-dashboard-header {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.corporate-dashboard-header h1 {
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.corporate-dashboard-header p {
+    color: var(--secondary-color);
+    font-size: 1.1rem;
+    margin-bottom: 0;
+}
+
+.corporate-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.corporate-card.card-hover-effect:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.corporate-card .card-body {
+    padding: 1.5rem;
+}
+
+.border-left-primary {
+    border-left: 5px solid var(--primary-color);
+}
+
+.border-left-success {
+    border-left: 5px solid var(--success-color);
+}
+
+.border-left-info {
+    border-left: 5px solid var(--info-color);
+}
+
+.border-left-warning {
+    border-left: 5px solid var(--warning-color);
+}
+
+.btn-corporate-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s;
+}
+
+.btn-corporate-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    color: white;
+}
+
+.btn-animate {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-animate::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+
+.btn-animate:hover::after {
+    animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(20, 20);
+        opacity: 0;
+    }
+}
+
+.corporate-stats-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.stats-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.stats-info {
+    flex: 1;
+}
+
+.stats-info h3 {
+    font-weight: 600;
+    font-size: 1.8rem;
+    margin-bottom: 0.25rem;
+    color: var(--dark-color);
+}
+
+.stats-info p {
+    color: var(--secondary-color);
+    margin-bottom: 0;
+    font-size: 0.9rem;
+}
+
+.bg-corporate-primary {
+    background-color: var(--primary-color);
+}
+
+.bg-corporate-success {
+    background-color: var(--success-color);
+}
+
+.bg-corporate-info {
+    background-color: var(--info-color);
+}
+
+.bg-corporate-warning {
+    background-color: var(--warning-color);
+}
+
+.tip-item {
+    margin-bottom: 1.5rem;
+}
+
+.tip-item h5 {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}

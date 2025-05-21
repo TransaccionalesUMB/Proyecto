@@ -1,0 +1,458 @@
+/**
+ * StockMaster Corporate Theme
+ * Inspirado en el diseño profesional de SAP
+ */
+
+:root {
+    /* Colores principales */
+    --primary-color: #0f62fe;       /* Azul principal, similar al de SAP */
+    --primary-dark: #0043ce;        /* Azul oscuro para hover */
+    --primary-light: #78a9ff;       /* Azul claro para elementos secundarios */
+    
+    /* Colores secundarios */
+    --secondary-color: #393939;     /* Gris oscuro para texto y elementos secundarios */
+    --secondary-light: #525252;     /* Gris medio para bordes y separadores */
+    --secondary-lighter: #f4f4f4;   /* Gris muy claro para fondos */
+    
+    /* Colores de acento */
+    --accent-color: #24a148;        /* Verde para éxito y elementos positivos */
+    --warning-color: #f1c21b;       /* Amarillo para advertencias */
+    --danger-color: #da1e28;        /* Rojo para errores y alertas */
+    --info-color: #1192e8;          /* Azul claro para información */
+    
+    /* Colores neutros */
+    --white: #ffffff;
+    --light-gray: #f4f4f4;
+    --medium-gray: #e0e0e0;
+    --dark-gray: #161616;
+    --black: #000000;
+    
+    /* Tipografía */
+    --font-family-sans: 'IBM Plex Sans', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    --font-family-mono: 'IBM Plex Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    
+    /* Espaciado */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-xxl: 3rem;
+    
+    /* Bordes */
+    --border-radius-sm: 0.125rem;
+    --border-radius-md: 0.25rem;
+    --border-radius-lg: 0.5rem;
+    
+    /* Sombras */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Estilos base */
+body {
+    font-family: var(--font-family-sans);
+    color: var(--secondary-color);
+    background-color: var(--light-gray);
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--primary-dark);
+    text-decoration: none;
+}
+
+/* Encabezado y navegación */
+.corporate-navbar {
+    background-color: var(--white);
+    box-shadow: var(--shadow-sm);
+    padding: 0;
+    border-bottom: 1px solid var(--medium-gray);
+}
+
+.corporate-navbar .navbar-brand {
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: var(--primary-color);
+    padding: 1rem var(--spacing-md);
+}
+
+.corporate-navbar .navbar-nav .nav-link {
+    color: var(--secondary-color);
+    font-weight: 500;
+    padding: 1.25rem var(--spacing-md);
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.corporate-navbar .navbar-nav .nav-link:hover,
+.corporate-navbar .navbar-nav .nav-link:focus {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-light);
+}
+
+.corporate-navbar .navbar-nav .nav-link.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+.corporate-navbar .dropdown-menu {
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--medium-gray);
+    padding: 0.5rem 0;
+}
+
+.corporate-navbar .dropdown-item {
+    padding: 0.5rem 1.25rem;
+    font-weight: 400;
+    color: var(--secondary-color);
+}
+
+.corporate-navbar .dropdown-item:hover,
+.corporate-navbar .dropdown-item:focus {
+    background-color: var(--light-gray);
+    color: var(--primary-color);
+}
+
+.corporate-navbar .dropdown-item.active {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+/* Contenedor principal */
+.corporate-container {
+    padding: var(--spacing-xl) 0;
+    min-height: calc(100vh - 70px);
+}
+
+/* Tarjetas */
+.corporate-card {
+    background-color: var(--white);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--medium-gray);
+    margin-bottom: var(--spacing-lg);
+    transition: box-shadow 0.3s ease;
+}
+
+.corporate-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.corporate-card .card-header {
+    background-color: var(--white);
+    border-bottom: 1px solid var(--medium-gray);
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.corporate-card .card-body {
+    padding: var(--spacing-lg);
+}
+
+.corporate-card .card-footer {
+    background-color: var(--light-gray);
+    border-top: 1px solid var(--medium-gray);
+    padding: var(--spacing-md) var(--spacing-lg);
+}
+
+/* Botones */
+.btn-corporate-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--white);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-sm);
+    transition: all 0.2s ease;
+}
+
+.btn-corporate-primary:hover,
+.btn-corporate-primary:focus {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    color: var(--white);
+}
+
+.btn-corporate-secondary {
+    background-color: var(--white);
+    border-color: var(--secondary-light);
+    color: var(--secondary-color);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-sm);
+    transition: all 0.2s ease;
+}
+
+.btn-corporate-secondary:hover,
+.btn-corporate-secondary:focus {
+    background-color: var(--light-gray);
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+/* Tablas */
+.corporate-table {
+    width: 100%;
+    margin-bottom: var(--spacing-lg);
+    color: var(--secondary-color);
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.corporate-table th,
+.corporate-table td {
+    padding: var(--spacing-md);
+    vertical-align: middle;
+    border-bottom: 1px solid var(--medium-gray);
+}
+
+.corporate-table thead th {
+    background-color: var(--light-gray);
+    border-bottom: 2px solid var(--secondary-light);
+    font-weight: 600;
+    text-align: left;
+}
+
+.corporate-table tbody tr:hover {
+    background-color: rgba(15, 98, 254, 0.05);
+}
+
+/* Formularios */
+.corporate-form .form-control {
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--medium-gray);
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.corporate-form .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(15, 98, 254, 0.25);
+}
+
+.corporate-form .form-label {
+    font-weight: 500;
+    margin-bottom: var(--spacing-xs);
+    color: var(--secondary-color);
+}
+
+/* Alertas */
+.corporate-alert {
+    border-radius: var(--border-radius-sm);
+    padding: var(--spacing-md) var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    border: 1px solid transparent;
+}
+
+.corporate-alert-success {
+    background-color: rgba(36, 161, 72, 0.1);
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+.corporate-alert-warning {
+    background-color: rgba(241, 194, 27, 0.1);
+    border-color: var(--warning-color);
+    color: #8a6d00;
+}
+
+.corporate-alert-danger {
+    background-color: rgba(218, 30, 40, 0.1);
+    border-color: var(--danger-color);
+    color: var(--danger-color);
+}
+
+.corporate-alert-info {
+    background-color: rgba(17, 146, 232, 0.1);
+    border-color: var(--info-color);
+    color: var(--info-color);
+}
+
+/* Badges */
+.corporate-badge {
+    display: inline-block;
+    padding: 0.25em 0.5em;
+    font-size: 0.75em;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: var(--border-radius-sm);
+}
+
+.corporate-badge-primary {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+.corporate-badge-success {
+    background-color: var(--accent-color);
+    color: var(--white);
+}
+
+.corporate-badge-warning {
+    background-color: var(--warning-color);
+    color: var(--dark-gray);
+}
+
+.corporate-badge-danger {
+    background-color: var(--danger-color);
+    color: var(--white);
+}
+
+.corporate-badge-info {
+    background-color: var(--info-color);
+    color: var(--white);
+}
+
+/* Pie de página */
+.corporate-footer {
+    background-color: var(--secondary-color);
+    color: var(--white);
+    padding: var(--spacing-xl) 0;
+    margin-top: auto;
+}
+
+.corporate-footer a {
+    color: var(--primary-light);
+}
+
+.corporate-footer a:hover {
+    color: var(--white);
+}
+
+/* Dashboard */
+.corporate-dashboard-header {
+    margin-bottom: var(--spacing-xl);
+}
+
+.corporate-dashboard-header h1 {
+    font-weight: 300;
+    font-size: 2rem;
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.corporate-dashboard-header p {
+    color: var(--secondary-light);
+    font-size: 1.1rem;
+    max-width: 800px;
+}
+
+.corporate-stat-card {
+    background-color: var(--white);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    border-left: 4px solid var(--primary-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.corporate-stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.corporate-stat-card.success {
+    border-left-color: var(--accent-color);
+}
+
+.corporate-stat-card.warning {
+    border-left-color: var(--warning-color);
+}
+
+.corporate-stat-card.danger {
+    border-left-color: var(--danger-color);
+}
+
+.corporate-stat-card.info {
+    border-left-color: var(--info-color);
+}
+
+.corporate-stat-card .stat-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--secondary-light);
+    margin-bottom: var(--spacing-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.corporate-stat-card .stat-value {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-xs);
+}
+
+.corporate-stat-card .stat-description {
+    font-size: 0.875rem;
+    color: var(--secondary-light);
+}
+
+/* Utilidades */
+.corporate-icon {
+    margin-right: var(--spacing-xs);
+}
+
+.corporate-section {
+    margin-bottom: var(--spacing-xxl);
+}
+
+.corporate-section-title {
+    font-weight: 300;
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--medium-gray);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .corporate-navbar .navbar-nav .nav-link {
+        padding: 0.75rem var(--spacing-md);
+        border-bottom: none;
+        border-left: 3px solid transparent;
+    }
+    
+    .corporate-navbar .navbar-nav .nav-link:hover,
+    .corporate-navbar .navbar-nav .nav-link:focus,
+    .corporate-navbar .navbar-nav .nav-link.active {
+        border-bottom-color: transparent;
+        border-left-color: var(--primary-color);
+    }
+}
+
+@media (max-width: 768px) {
+    .corporate-container {
+        padding: var(--spacing-lg) 0;
+    }
+    
+    .corporate-dashboard-header h1 {
+        font-size: 1.75rem;
+    }
+    
+    .corporate-dashboard-header p {
+        font-size: 1rem;
+    }
+    
+    .corporate-stat-card .stat-value {
+        font-size: 1.5rem;
+    }
+}

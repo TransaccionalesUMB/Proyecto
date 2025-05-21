@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -17,27 +19,34 @@ public class UserManagementController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @GetMapping("/manage-users")
+    @GetMapping("/users")
     @PreAuthorize("hasRole('ADMIN')")
-    public String manageUsers() {
+    public String manageUsers(Model model) {
+        // Agregar variables de control de acceso para la barra de navegación
+        model.addAttribute("isAdmin", true);
+        model.addAttribute("isOperador", true);
+        model.addAttribute("isAuditor", true);
+        model.addAttribute("isCliente", false);
+        // Agregar lista de usuarios al modelo
+        model.addAttribute("usuarios", usuarioRepository.findAll());
         return "admin/users";
     }
 
-    @GetMapping("/users")
+    @GetMapping("/api/users")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public List<Usuario> getAllUsers() {
         return usuarioRepository.findAll();
     }
 
-    @PostMapping("/users")
+    @PostMapping("/api/users")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public Usuario createUser(@RequestBody Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/api/users/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
@@ -49,7 +58,7 @@ public class UserManagementController {
             .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/api/users/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity<Usuario> getUserById(@PathVariable Integer id) {
@@ -58,7 +67,7 @@ public class UserManagementController {
             .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/api/users/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity<Usuario> updateUser(@PathVariable Integer id, @RequestBody Usuario usuarioDetails) {
@@ -77,11 +86,13 @@ public class UserManagementController {
             .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/roles")
+    @GetMapping("/api/roles")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public ResponseEntity<String[]> getRoles() {
         String[] roles = {"ADMIN", "OPERADOR", "CLIENTE", "AUDITOR"};
         return ResponseEntity.ok(roles);
     }
+    
+    // Eliminado el método manageRoles para evitar conflicto con AdminController
 }

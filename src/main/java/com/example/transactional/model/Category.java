@@ -1,18 +1,28 @@
 package com.example.transactional.model;
 
-// Se eliminan todas las anotaciones JPA para evitar que Hibernate intente mapear esta clase
+import javax.persistence.*;
+
+@Entity
+@Table(name = "Categoria")
 public class Category {
     
-    private Integer id;
+    @Id
+    @Column(name = "id_categoria")
+    private String id;
+    
+    @Column(name = "nombre")
     private String name;
+    
+    // No hay columna descripcion en la tabla Categoria
+    @Transient // Esta anotación indica que este campo no se mapea a ninguna columna
     private String description;
 
     // Getters and Setters
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

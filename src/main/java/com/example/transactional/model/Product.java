@@ -22,10 +22,10 @@ public class Product {
     private BigDecimal price;
     
     @Column(name = "id_categoria")
-    private Integer categoryId;
+    private String categoryId;
     
     @Column(name = "id_proveedor")
-    private Integer providerId;
+    private String providerId;
 
     // Getters and Setters
     public Integer getId() {
@@ -60,19 +60,19 @@ public class Product {
         this.price = price;
     }
 
-    public Integer getCategoryId() {
+    public String getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(Integer categoryId) {
+    public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
     }
 
-    public Integer getProviderId() {
+    public String getProviderId() {
         return providerId;
     }
 
-    public void setProviderId(Integer providerId) {
+    public void setProviderId(String providerId) {
         this.providerId = providerId;
     }
 }

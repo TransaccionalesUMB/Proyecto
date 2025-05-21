@@ -22,6 +22,9 @@ public class Usuario {
     
     @Column(name = "id_rol", nullable = false)
     private Integer idRol;
+    
+    @Column(name = "activo", nullable = true, columnDefinition = "tinyint(1) default 1")
+    private Boolean activo = true;
 
     public Integer getId() {
         return id;
@@ -61,5 +64,13 @@ public class Usuario {
 
     public void setIdRol(Integer idRol) {
         this.idRol = idRol;
+    }
+    
+    public Boolean getActivo() {
+        return activo;
+    }
+    
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 }

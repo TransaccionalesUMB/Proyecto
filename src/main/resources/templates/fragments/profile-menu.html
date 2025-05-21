@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <!-- Fragmento para el menú de perfil de usuario -->
+    <div th:fragment="profile-menu" class="profile-menu-container" th:with="currentUser=${@usuarioRepository.findByEmail(#authentication.name).orElse(null)}">
+        <div class="dropdown">
+            <button class="btn btn-profile dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="profile-info">
+                    <span class="profile-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </span>
+                    <span class="profile-name" th:text="${currentUser != null ? currentUser.nombre : #authentication.name}">Usuario</span>
+                </div>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                <li>
+                    <a class="dropdown-item" th:href="@{/profile}">
+                        <i class="fas fa-user-edit me-2"></i> Editar Perfil
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <form th:action="@{/logout}" method="post" class="dropdown-item-form">
+                        <button class="dropdown-item" type="submit">
+                            <i class="fas fa-sign-out-alt me-2"></i> Cerrar Sesión
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

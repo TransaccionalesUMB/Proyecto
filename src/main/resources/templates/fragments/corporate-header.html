@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="corporate-head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} + ' - StockMaster'">StockMaster</title>
+    
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    
+    <!-- DataTables -->
+    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    
+    <!-- Estilo Corporativo -->
+    <link th:href="@{/css/stockmaster-corporate.css}" rel="stylesheet">
+    
+    <!-- Animaciones eliminadas para evitar conflictos -->
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" th:href="@{/images/favicon.png}">
+    
+    <!-- Estilos adicionales específicos de la página -->
+    <th:block th:replace="${styles}"></th:block>
+</head>
+<body>
+    <!-- Barra de navegación corporativa -->
+    <nav th:fragment="corporate-navbar" class="navbar navbar-expand-lg corporate-navbar">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/home}">
+                <i class="fas fa-boxes-stacked me-2"></i>StockMaster
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active' : ''}" 
+                           th:href="@{/home}">
+                            <i class="fas fa-home corporate-icon"></i>Inicio
+                        </a>
+                    </li>
+                    
+                    <!-- Productos - Visible para usuarios con permiso GESTIONAR_PRODUCTOS -->
+                    <li class="nav-item" th:if="${canViewProducts}">
+                        <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/products') ? 'active' : ''}" 
+                           th:href="@{/products/list}">
+                            <i class="fas fa-box-open corporate-icon"></i>Productos
+                        </a>
+                    </li>
+                    
+                    <!-- Inventario - Visible para usuarios con permiso GESTIONAR_INVENTARIO -->
+                    <li class="nav-item" th:if="${canViewInventory}">
+                        <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/inventario') ? 'active' : ''}" 
+                           th:href="@{/inventario}">
+                            <i class="fas fa-warehouse corporate-icon"></i>Inventario
+                        </a>
+                    </li>
+                    
+                    <!-- Reportes - Visible para usuarios con permiso VER_REPORTES -->
+                    <li class="nav-item dropdown" th:if="${canViewReports}">
+                        <a class="nav-link dropdown-toggle" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/reports') ? 'active' : ''}" 
+                           href="#" id="reportesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-chart-bar corporate-icon"></i>Reportes
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="reportesDropdown">
+                            <li><a class="dropdown-item" th:href="@{/reports/inventory}">Inventario Completo</a></li>
+                            <li><a class="dropdown-item" th:href="@{/reports/by-category}">Stock por Categoría</a></li>
+                            <li><a class="dropdown-item" th:href="@{/reports/by-provider}">Stock por Proveedor</a></li>
+                            <li><a class="dropdown-item" th:href="@{/reports/low-stock}">Productos con Bajo Stock</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/reports/marketing}">Estadísticas de Marketing</a></li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Administración - Visible solo para ADMIN -->
+                    <li class="nav-item dropdown" th:if="${isAdmin}">
+                        <a class="nav-link dropdown-toggle" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin') ? 'active' : ''}" 
+                           href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-cogs corporate-icon"></i>Administración
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                            <li><a class="dropdown-item" th:href="@{/admin/manage-users}">Gestionar Usuarios</a></li>
+                            <li><a class="dropdown-item" th:href="@{/admin/manage-roles}">Gestionar Roles</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/admin/manage-warehouses}">Gestionar Almacenes</a></li>
+                            <li><a class="dropdown-item" th:href="@{/admin/settings}">Configuración</a></li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Mi Cuenta - Visible solo para CLIENTE -->
+                    <li class="nav-item dropdown" th:if="${isCliente}">
+                        <a class="nav-link dropdown-toggle" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/cliente') ? 'active' : ''}" 
+                           href="#" id="clienteDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user corporate-icon"></i>Mi Cuenta
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="clienteDropdown">
+                            <li><a class="dropdown-item" th:href="@{/cliente/pedidos}">Mis Pedidos</a></li>
+                            <li><a class="dropdown-item" th:href="@{/cliente/perfil}">Mi Perfil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/cliente/catalogo}">Catálogo de Productos</a></li>
+                            <li><a class="dropdown-item" th:href="@{/cliente/soporte}">Soporte</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <!-- Información del usuario y botón de logout -->
+                <div class="navbar-nav">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" 
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle corporate-icon"></i>
+                            <span th:text="${userName ?: 'Usuario'}">Usuario</span>
+                            <span class="corporate-badge corporate-badge-primary ms-1" th:text="${userRole ?: 'Usuario'}">Rol</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" th:href="@{/profile}"><i class="fas fa-id-card corporate-icon"></i>Mi Perfil</a></li>
+                            <li><a class="dropdown-item" th:href="@{/change-password}"><i class="fas fa-key corporate-icon"></i>Cambiar Contraseña</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form th:action="@{/logout}" method="post" class="dropdown-item p-0">
+                                    <button type="submit" class="btn btn-link dropdown-item text-danger">
+                                        <i class="fas fa-sign-out-alt corporate-icon"></i>Cerrar Sesión
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Pie de página corporativo -->
+    <footer th:fragment="corporate-footer" class="corporate-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>StockMaster</h5>
+                    <p>Sistema de gestión de inventario profesional para empresas de todos los tamaños.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Enlaces Rápidos</h5>
+                    <ul class="list-unstyled">
+                        <li><a th:href="@{/home}">Inicio</a></li>
+                        <li><a th:href="@{/about}">Acerca de</a></li>
+                        <li><a th:href="@{/contact}">Contacto</a></li>
+                        <li><a th:href="@{/help}">Ayuda</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contacto</h5>
+                    <address>
+                        <p><i class="fas fa-map-marker-alt corporate-icon"></i> Calle Principal #123, Ciudad</p>
+                        <p><i class="fas fa-phone corporate-icon"></i> +1 234 567 890</p>
+                        <p><i class="fas fa-envelope corporate-icon"></i> info@stockmaster.com</p>
+                    </address>
+                </div>
+            </div>
+            <hr class="mt-4 mb-4" style="border-color: var(--secondary-light);">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2025 StockMaster. Todos los derechos reservados.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item"><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fab fa-twitter"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fab fa-instagram"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Scripts corporativos -->
+    <th:block th:fragment="corporate-scripts">
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        
+        <!-- DataTables -->
+        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+        
+        <!-- Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        
+        <!-- Animaciones -->
+        <script th:src="@{/js/animations.js}"></script>
+        
+        <!-- Scripts adicionales específicos de la página -->
+        <th:block th:replace="${scripts}"></th:block>
+        
+        <!-- Inicialización de componentes -->
+        <script>
+            $(document).ready(function() {
+                // Inicializar tooltips
+                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl);
+                });
+                
+                // Inicializar popovers
+                var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+                var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                    return new bootstrap.Popover(popoverTriggerEl);
+                });
+                
+                // Inicializar DataTables
+                $('.corporate-table').DataTable({
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                    }
+                });
+            });
+        </script>
+    </th:block>
+    
+    <!-- Scripts corporativos -->
+    <th:block th:fragment="corporate-scripts">
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- jQuery -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <!-- DataTables -->
+        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    </th:block>
+</body>
+</html>

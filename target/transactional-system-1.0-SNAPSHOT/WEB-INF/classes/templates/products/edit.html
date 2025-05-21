@@ -219,8 +219,8 @@
                             <label for="categoryId" class="form-label">
                                 <i class="fas fa-sitemap me-1"></i>Categoría
                             </label>
-                            <select class="form-select" id="categoryId" th:field="*{categoryId}">
-                                <option value="" selected>-- Seleccione una categoría --</option>
+                            <select class="form-select" id="categoryId" th:field="*{categoryId}" required>
+                                <option value="" disabled>-- Seleccione una categoría --</option>
                                 <option th:each="category : ${categories}" 
                                         th:value="${category.id}" 
                                         th:text="${category.name}"
@@ -231,8 +231,8 @@
                             <label for="providerId" class="form-label">
                                 <i class="fas fa-truck me-1"></i>Proveedor
                             </label>
-                            <select class="form-select" id="providerId" th:field="*{providerId}">
-                                <option value="" selected>-- Seleccione un proveedor --</option>
+                            <select class="form-select" id="providerId" th:field="*{providerId}" required>
+                                <option value="" disabled>-- Seleccione un proveedor --</option>
                                 <option th:each="provider : ${providers}" 
                                         th:value="${provider.id}" 
                                         th:text="${provider.name}"

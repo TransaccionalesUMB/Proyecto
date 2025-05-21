@@ -2,480 +2,319 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Usuarios - StockMaster</title>
+    
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    
     <style>
-        :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --accent-color: #e67e22;
-            --light-color: #ecf0f1;
-            --dark-color: #34495e;
-        }
-        
         body {
-            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
             min-height: 100vh;
+            padding-bottom: 60px;
         }
         
         .navbar {
-            background-color: var(--primary-color) !important;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .navbar-brand {
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: var(--light-color) !important;
-        }
-        
-        .nav-link {
-            color: var(--light-color) !important;
-            font-weight: 500;
-            transition: all 0.3s;
-            padding: 0.5rem 1rem !important;
-            margin: 0 0.25rem;
-            border-radius: 5px;
-        }
-        
-        .nav-link:hover, .nav-link.active {
-            background-color: var(--secondary-color);
-            color: white !important;
+            background-color: #343a40;
         }
         
         .card {
-            border: none;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
         }
         
         .card-header {
-            background-color: var(--secondary-color);
+            background-color: #343a40;
             color: white;
             font-weight: 600;
-            padding: 1rem 2rem;
-            border: none;
-        }
-        
-        .card-title {
-            color: var(--primary-color);
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-        
-        .card-header .card-title {
-            color: white;
-            margin-bottom: 0;
-        }
-        
-        .form-label {
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-        
-        .form-control {
-            border: 2px solid #ddd;
-            padding: 10px;
-            border-radius: 8px;
-        }
-        
-        .form-control:focus {
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
         }
         
         .btn-primary {
-            background-color: var(--accent-color);
-            border: none;
-            padding: 0.5rem 1.5rem;
-            font-weight: 600;
-            transition: all 0.3s;
+            background-color: #0d6efd;
+            border-color: #0d6efd;
         }
         
-        .btn-primary:hover {
-            background-color: #d35400;
-            transform: translateY(-2px);
-        }
-        
-        .btn-secondary {
-            background-color: var(--secondary-color);
-            border: none;
-            transition: all 0.2s;
-        }
-        
-        .btn-secondary:hover {
-            background-color: #2980b9;
-            transform: translateY(-2px);
+        .btn-success {
+            background-color: #198754;
+            border-color: #198754;
         }
         
         .btn-danger {
-            background-color: #e74c3c;
-            border: none;
-            transition: all 0.2s;
-        }
-        
-        .btn-danger:hover {
-            background-color: #c0392b;
-            transform: translateY(-2px);
-        }
-        
-        .btn-outline-light:hover {
-            background-color: var(--secondary-color);
-            border-color: var(--secondary-color);
-        }
-        
-        .btn-outline-secondary {
-            color: var(--secondary-color);
-            border-color: var(--secondary-color);
-        }
-        
-        .btn-outline-secondary:hover {
-            background-color: var(--secondary-color);
-            color: white;
-        }
-        
-        .table {
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-        }
-        
-        .table thead {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        .table thead th {
-            font-weight: 600;
-            padding: 1rem;
-            border: none;
-        }
-        
-        .table tbody tr:nth-child(even) {
-            background-color: rgba(236, 240, 241, 0.5);
-        }
-        
-        .table tbody td {
-            padding: 1rem;
-            vertical-align: middle;
-            border-color: #eee;
-        }
-        
-        .page-header {
-            background-color: var(--secondary-color);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-bottom: 2rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .footer {
-            margin-top: 3rem;
-            padding: 2rem 0;
-            background-color: var(--primary-color);
-            color: var(--light-color);
+            background-color: #dc3545;
+            border-color: #dc3545;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand" href="/home">
-                <i class="fas fa-boxes-stacked me-2"></i>
-                StockMaster
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/home">
-                            <i class="fas fa-home me-1"></i> Inicio
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/products">
-                            <i class="fas fa-box-open me-1"></i> Productos
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/admin/manage-users">
-                            <i class="fas fa-users-cog me-1"></i> Gestionar Usuarios
-                        </a>
-                    </li>
-                </ul>
-                <form th:action="@{/logout}" method="post" class="d-flex">
-                    <button class="btn btn-outline-light" type="submit">
-                        <i class="fas fa-sign-out-alt me-1"></i> Cerrar Sesión
-                    </button>
-                </form>
-            </div>
-        </div>
-    </nav>
-    
-    <div class="container mt-5">
-        <div class="page-header d-flex justify-content-between align-items-center">
-            <div>
-                <h2><i class="fas fa-users-cog me-2"></i>Gestión de Usuarios</h2>
-                <p class="mb-0 lead">Administre los usuarios del sistema</p>
-            </div>
-            <a href="/home" class="btn btn-light btn-lg">
-                <i class="fas fa-home me-1"></i> Volver al Inicio
-            </a>
-        </div>
-        
-        <div id="alertContainer" class="mt-3"></div>
-        
-        <!-- Formulario para crear usuarios -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-user-plus me-2"></i>Crear Nuevo Usuario
-                </h5>
-            </div>
-            <div class="card-body">
-                <form id="createUserForm">
-                    <div class="row">
-                        <div class="col-md-3 mb-3">
-                            <label for="nombre" class="form-label">
-                                <i class="fas fa-user me-1"></i>Nombre
-                            </label>
-                            <input type="text" class="form-control" id="nombre" required>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="email" class="form-label">
-                                <i class="fas fa-envelope me-1"></i>Email
-                            </label>
-                            <input type="email" class="form-control" id="email" required>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="password" class="form-label">
-                                <i class="fas fa-key me-1"></i>Contraseña
-                            </label>
-                            <input type="password" class="form-control" id="password" required>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="rol" class="form-label">
-                                <i class="fas fa-user-tag me-1"></i>Rol
-                            </label>
-                            <select class="form-control" id="rol" required>
-                                <!-- Las opciones se cargarán dinámicamente -->
-                            </select>
-                        </div>
+    <!-- Barra de navegación principal -->
+    <div th:replace="fragments/navigation :: main-nav"></div>
+
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-users-cog me-2"></i>Gestión de Usuarios</h5>
                     </div>
-                    <div class="text-end">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save me-1"></i>Guardar Usuario
-                        </button>
+                    <div class="card-body">
+                        <p class="lead">Administre los usuarios del sistema</p>
                     </div>
-                </form>
-            </div>
-        </div>
-        
-        <!-- Tabla de usuarios -->
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-users me-2"></i>Usuarios Registrados
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th><i class="fas fa-hashtag me-1"></i>ID</th>
-                                <th><i class="fas fa-user me-1"></i>Nombre</th>
-                                <th><i class="fas fa-envelope me-1"></i>Email</th>
-                                <th><i class="fas fa-user-tag me-1"></i>Rol</th>
-                                <th><i class="fas fa-cogs me-1"></i>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="userList">
-                            <!-- Los usuarios se cargarán dinámicamente -->
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
+
+        <!-- Formulario para añadir nuevo usuario -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-user-plus me-2"></i>Añadir Nuevo Usuario</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="createUserForm">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="nombre" class="form-label">Nombre Completo</label>
+                                    <input type="text" class="form-control" id="nombre" name="nombre" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="password" class="form-label">Contraseña</label>
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="rol" class="form-label">Rol</label>
+                                    <select class="form-select" id="rol" name="idRol" required>
+                                        <option value="">Seleccione un rol</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i>Guardar Usuario
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de usuarios -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-users me-2"></i>Listado de Usuarios</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="userTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>Email</th>
+                                        <th>Rol</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="userTableBody">
+                                    <tr th:each="usuario : ${usuarios}">
+                                        <td th:text="${usuario.id}"></td>
+                                        <td th:text="${usuario.nombre}"></td>
+                                        <td th:text="${usuario.email}"></td>
+                                        <td>
+                                            <span th:if="${usuario.idRol == 1}" class="badge bg-danger">Admin</span>
+                                            <span th:if="${usuario.idRol == 2}" class="badge bg-primary">Operador</span>
+                                            <span th:if="${usuario.idRol == 3}" class="badge bg-success">Cliente</span>
+                                            <span th:if="${usuario.idRol == 4}" class="badge bg-info">Auditor</span>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-warning" th:onclick="'editUser(' + ${usuario.id} + ')'">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </button>
+                                            <button class="btn btn-sm btn-danger" th:onclick="'deleteUser(' + ${usuario.id} + ')'">
+                                                <i class="fas fa-trash"></i> Eliminar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${#lists.isEmpty(usuarios)}">
+                                        <td colspan="5" class="text-center">No hay usuarios disponibles</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
     </div>
-    
+
     <!-- Modal para editar usuario -->
     <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header bg-secondary text-white">
-                    <h5 class="modal-title" id="editUserModalLabel">
-                        <i class="fas fa-user-edit me-1"></i>Editar Usuario
-                    </h5>
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="editUserModalLabel">Editar Usuario</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="editUserForm">
                         <input type="hidden" id="editUserId">
                         <div class="mb-3">
-                            <label for="editNombre" class="form-label">
-                                <i class="fas fa-user me-1"></i>Nombre
-                            </label>
-                            <input type="text" class="form-control" id="editNombre" required>
+                            <label for="editNombre" class="form-label">Nombre Completo</label>
+                            <input type="text" class="form-control" id="editNombre" name="nombre" required>
                         </div>
                         <div class="mb-3">
-                            <label for="editEmail" class="form-label">
-                                <i class="fas fa-envelope me-1"></i>Email
-                            </label>
-                            <input type="email" class="form-control" id="editEmail" required>
+                            <label for="editEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editEmail" name="email" required>
                         </div>
                         <div class="mb-3">
-                            <label for="editPassword" class="form-label">
-                                <i class="fas fa-key me-1"></i>Contraseña
-                                <small class="text-muted">(Dejar en blanco para no cambiar)</small>
-                            </label>
-                            <input type="password" class="form-control" id="editPassword">
-                        </div>
-                        <div class="mb-3">
-                            <label for="editRol" class="form-label">
-                                <i class="fas fa-user-tag me-1"></i>Rol
-                            </label>
-                            <select class="form-control" id="editRol" required>
-                                <!-- Las opciones se cargarán dinámicamente -->
+                            <label for="editRol" class="form-label">Rol</label>
+                            <select class="form-select" id="editRol" name="idRol" required>
+                                <option value="">Seleccione un rol</option>
                             </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPassword" class="form-label">Nueva Contraseña (dejar en blanco para mantener la actual)</label>
+                            <input type="password" class="form-control" id="editPassword" name="password">
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="fas fa-times me-1"></i>Cancelar
-                    </button>
-                    <button type="button" class="btn btn-primary" id="saveUserChanges">
-                        <i class="fas fa-save me-1"></i>Guardar Cambios
-                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="saveUserChanges">Guardar Cambios</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <footer class="footer mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5><i class="fas fa-boxes-stacked me-2"></i>StockMaster</h5>
-                    <p>Gestión eficiente de inventario y productos.</p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <p>&copy; 2025 StockMaster</p>
-                    <p>Todos los derechos reservados</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
     <script>
-        // Alerta personalizada
+        // Función para mostrar alertas
         function showAlert(message, type = 'success') {
-            const alertContainer = document.getElementById('alertContainer');
-            const alert = document.createElement('div');
-            alert.className = `alert alert-${type} alert-dismissible fade show`;
-            alert.role = 'alert';
-            
-            let icon = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
-            
-            alert.innerHTML = `
-                <i class="${icon} me-2"></i>${message}
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.innerHTML = `
+                ${message}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             `;
             
-            alertContainer.appendChild(alert);
+            const container = document.querySelector('.container');
+            container.insertBefore(alertDiv, container.firstChild);
             
-            // Auto dismiss
+            // Auto-cerrar después de 5 segundos
             setTimeout(() => {
-                alert.classList.remove('show');
-                setTimeout(() => alert.remove(), 300);
+                alertDiv.classList.remove('show');
+                setTimeout(() => alertDiv.remove(), 300);
             }, 5000);
         }
-
+        
         // Función para cargar opciones de roles en un select
         function loadRolOptions(selectElement) {
-            fetch('/admin/roles')
+            // Limpiar opciones existentes excepto la primera (si existe)
+            while (selectElement.options.length > 1) {
+                selectElement.remove(1);
+            }
+            
+            fetch('/admin/api/roles')
                 .then(response => response.json())
                 .then(roles => {
-                    selectElement.innerHTML = '';
-                    roles.forEach(role => {
+                    roles.forEach((roleName, index) => {
                         const option = document.createElement('option');
-                        option.value = role === 'ADMIN' ? 1 : 
-                                      role === 'OPERADOR' ? 2 :
-                                      role === 'CLIENTE' ? 3 : 4;
-                        option.textContent = role;
+                        option.value = index + 1; // Asignar valores 1, 2, 3, 4 para ADMIN, OPERADOR, CLIENTE, AUDITOR
+                        option.textContent = roleName;
+                        selectElement.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al cargar roles:', error);
+                    showAlert('Error al cargar roles: ' + error.message, 'danger');
+                    
+                    // Si falla la carga desde la API, agregar roles predeterminados
+                    const defaultRoles = [
+                        { id: 1, name: 'ADMIN' },
+                        { id: 2, name: 'OPERADOR' },
+                        { id: 3, name: 'CLIENTE' },
+                        { id: 4, name: 'AUDITOR' }
+                    ];
+                    
+                    defaultRoles.forEach(role => {
+                        const option = document.createElement('option');
+                        option.value = role.id;
+                        option.textContent = role.name;
                         selectElement.appendChild(option);
                     });
                 });
         }
-
+        
         // Cargar roles al inicio
         loadRolOptions(document.getElementById('rol'));
         loadRolOptions(document.getElementById('editRol'));
-
-        // Cargar usuarios
+        
+        // Función para cargar usuarios
         function loadUsers() {
-            fetch('/admin/users')
+            fetch('/admin/api/users')
                 .then(response => response.json())
                 .then(users => {
-                    const userList = document.getElementById('userList');
-                    userList.innerHTML = '';
+                    const tableBody = document.getElementById('userTableBody');
+                    tableBody.innerHTML = '';
+                    
                     users.forEach(user => {
                         const row = document.createElement('tr');
-                        
-                        // Convertir id para que sea compatible con la respuesta del servidor
-                        const userId = user.id || user.idUsuario;
-                        
-                        // Determinar la clase para el rol
-                        let rolClass;
-                        switch(user.idRol) {
-                            case 1: rolClass = 'bg-danger'; break;    // ADMIN
-                            case 2: rolClass = 'bg-primary'; break;   // OPERADOR
-                            case 3: rolClass = 'bg-success'; break;   // CLIENTE
-                            default: rolClass = 'bg-secondary';       // AUDITOR
-                        }
-                        
-                        let rolText = user.idRol === 1 ? 'ADMIN' : 
-                                      user.idRol === 2 ? 'OPERADOR' :
-                                      user.idRol === 3 ? 'CLIENTE' : 'AUDITOR';
-                        
                         row.innerHTML = `
-                            <td>${userId}</td>
-                            <td>${user.nombre}</td>
-                            <td>${user.email}</td>
-                            <td><span class="badge ${rolClass}">${rolText}</span></td>
+                            <td>${user.id}</td>
+                            <td>${user.nombre || ''}</td>
+                            <td>${user.email || ''}</td>
+                            <td>${user.rolName || ''}</td>
                             <td>
-                                <button class="btn btn-primary btn-sm me-1" onclick="editUser(${userId})">
-                                    <i class="fas fa-edit me-1"></i>Editar
+                                <button class="btn btn-sm btn-primary" onclick="editUser(${user.id})">
+                                    <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="btn btn-danger btn-sm" onclick="deleteUser(${userId})">
-                                    <i class="fas fa-trash me-1"></i>Eliminar
+                                <button class="btn btn-sm btn-danger" onclick="deleteUser(${user.id})">
+                                    <i class="fas fa-trash"></i>
                                 </button>
                             </td>
                         `;
-                        userList.appendChild(row);
+                        tableBody.appendChild(row);
                     });
+                })
+                .catch(error => {
+                    console.error('Error al cargar usuarios:', error);
+                    showAlert('Error al cargar usuarios: ' + error.message, 'danger');
                 });
         }
-
+        
+        // Cargar usuarios al inicio
+        loadUsers();
+        
         // Crear usuario
         document.getElementById('createUserForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const userData = {
+                nombre: document.getElementById('nombre').value,
                 email: document.getElementById('email').value,
                 password: document.getElementById('password').value,
-                nombre: document.getElementById('nombre').value,
-                idRol: parseInt(document.getElementById('rol').value)
+                idRol: document.getElementById('rol').value
             };
-
-            fetch('/admin/users', {
+            
+            fetch('/admin/api/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -483,103 +322,96 @@
                 body: JSON.stringify(userData)
             })
             .then(response => response.json())
-            .then(() => {
-                loadUsers();
+            .then(data => {
+                showAlert('Usuario creado exitosamente');
                 document.getElementById('createUserForm').reset();
-                showAlert('Usuario creado con éxito', 'success');
+                loadUsers();
             })
-            .catch(error => showAlert('Error al crear usuario', 'danger'));
+            .catch(error => {
+                console.error('Error al crear usuario:', error);
+                showAlert('Error al crear usuario: ' + error.message, 'danger');
+            });
         });
-
-        // Obtener y mostrar datos de usuario para edición
+        
+        // Función para editar usuario
         function editUser(id) {
-            fetch(`/admin/users/${id}`)
+            fetch(`/admin/api/users/${id}`)
                 .then(response => response.json())
                 .then(user => {
                     document.getElementById('editUserId').value = user.id;
-                    document.getElementById('editNombre').value = user.nombre;
-                    document.getElementById('editEmail').value = user.email;
-                    document.getElementById('editPassword').value = '';
-                    document.getElementById('editRol').value = user.idRol;
+                    document.getElementById('editNombre').value = user.nombre || '';
+                    document.getElementById('editEmail').value = user.email || '';
+                    document.getElementById('editRol').value = user.idRol || '';
                     
-                    // Mostrar el modal
-                    const modal = new bootstrap.Modal(document.getElementById('editUserModal'));
-                    modal.show();
+                    const editUserModal = new bootstrap.Modal(document.getElementById('editUserModal'));
+                    editUserModal.show();
                 })
-                .catch(error => showAlert('Error al cargar datos del usuario', 'danger'));
+                .catch(error => {
+                    console.error('Error al obtener usuario:', error);
+                    showAlert('Error al obtener usuario: ' + error.message, 'danger');
+                });
         }
-
+        
         // Guardar cambios del usuario
         document.getElementById('saveUserChanges').addEventListener('click', function() {
             const userId = document.getElementById('editUserId').value;
             const userData = {
+                id: userId,
                 nombre: document.getElementById('editNombre').value,
                 email: document.getElementById('editEmail').value,
-                idRol: parseInt(document.getElementById('editRol').value)
+                idRol: document.getElementById('editRol').value
             };
             
-            // Solo incluir contraseña si se ha introducido una nueva
+            // Añadir contraseña solo si se ha introducido una nueva
             const password = document.getElementById('editPassword').value;
             if (password) {
                 userData.password = password;
             }
-
-            fetch(`/admin/users/${userId}`, {
+            
+            fetch(`/admin/api/users/${userId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(userData)
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error al actualizar el usuario');
-                }
-                return response.json();
-            })
-            .then(() => {
-                // Cerrar modal
-                const modal = bootstrap.Modal.getInstance(document.getElementById('editUserModal'));
-                modal.hide();
-                
+            .then(response => response.json())
+            .then(data => {
+                showAlert('Usuario actualizado exitosamente');
+                const editUserModal = bootstrap.Modal.getInstance(document.getElementById('editUserModal'));
+                editUserModal.hide();
                 loadUsers();
-                showAlert('Usuario actualizado con éxito', 'success');
             })
             .catch(error => {
-                console.error('Error:', error);
-                showAlert('Error al actualizar el usuario', 'danger');
+                console.error('Error al actualizar usuario:', error);
+                showAlert('Error al actualizar usuario: ' + error.message, 'danger');
             });
         });
-
-        // Eliminar usuario
+        
+        // Función para eliminar usuario
         function deleteUser(id) {
-            if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
-                fetch(`/admin/users/${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
+            if (confirm('¿Está seguro de eliminar este usuario?')) {
+                fetch(`/admin/api/users/${id}`, {
+                    method: 'DELETE'
                 })
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error al eliminar el usuario');
+                    if (response.ok) {
+                        showAlert('Usuario eliminado exitosamente');
+                        loadUsers();
+                    } else {
+                        throw new Error('Error al eliminar usuario');
                     }
-                    showAlert('Usuario eliminado con éxito', 'success');
-                    loadUsers();
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-                    showAlert('Error al eliminar el usuario', 'danger');
+                    console.error('Error al eliminar usuario:', error);
+                    showAlert('Error al eliminar usuario: ' + error.message, 'danger');
                 });
             }
         }
-
+        
         // Exponer la función al ámbito global para que sea accesible desde HTML
         window.editUser = editUser;
         window.deleteUser = deleteUser;
-
-        // Cargar usuarios al inicio
-        loadUsers();
     </script>
 </body>
 </html>

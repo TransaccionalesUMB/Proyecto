@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/corporate-header :: corporate-head(${title})">
+    <meta charset="UTF-8">
+    <title>StockMaster</title>
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav th:replace="fragments/corporate-header :: corporate-navbar"></nav>
+    
+    <!-- Contenido principal -->
+    <main class="corporate-container">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <nav th:if="${breadcrumbs != null}" aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/home}">Inicio</a></li>
+                    <li th:each="breadcrumb, iterStat : ${breadcrumbs}" 
+                        class="breadcrumb-item" th:classappend="${iterStat.last} ? 'active' : ''">
+                        <a th:if="${!iterStat.last}" th:href="${breadcrumb.url}" th:text="${breadcrumb.label}">Label</a>
+                        <span th:if="${iterStat.last}" th:text="${breadcrumb.label}">Label</span>
+                    </li>
+                </ol>
+            </nav>
+            
+            <!-- Alertas -->
+            <div th:if="${success != null}" class="corporate-alert corporate-alert-success">
+                <i class="fas fa-check-circle corporate-icon"></i>
+                <span th:text="${success}">Mensaje de éxito</span>
+            </div>
+            
+            <div th:if="${warning != null}" class="corporate-alert corporate-alert-warning">
+                <i class="fas fa-exclamation-triangle corporate-icon"></i>
+                <span th:text="${warning}">Mensaje de advertencia</span>
+            </div>
+            
+            <div th:if="${error != null}" class="corporate-alert corporate-alert-danger">
+                <i class="fas fa-times-circle corporate-icon"></i>
+                <span th:text="${error}">Mensaje de error</span>
+            </div>
+            
+            <div th:if="${info != null}" class="corporate-alert corporate-alert-info">
+                <i class="fas fa-info-circle corporate-icon"></i>
+                <span th:text="${info}">Mensaje informativo</span>
+            </div>
+            
+            <!-- Contenido específico de la página -->
+            <div th:replace="${content}">
+                Contenido de la página
+            </div>
+        </div>
+    </main>
+    
+    <!-- Pie de página -->
+    <footer th:replace="fragments/corporate-header :: corporate-footer"></footer>
+    
+    <!-- Scripts -->
+    <th:block th:replace="fragments/corporate-header :: corporate-scripts"></th:block>
+</body>
+</html>

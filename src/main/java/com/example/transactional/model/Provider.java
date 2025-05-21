@@ -1,21 +1,37 @@
 package com.example.transactional.model;
 
-// Se eliminan todas las anotaciones JPA para evitar que Hibernate intente mapear esta clase
+import javax.persistence.*;
+
+@Entity
+@Table(name = "Proveedor")
 public class Provider {
     
-    private Integer id;
+    @Id
+    @Column(name = "id_proveedor")
+    private String id;
+    
+    @Column(name = "nombre")
     private String name;
+    
+    @Column(name = "contacto")
     private String contact;
+    
+    // Los siguientes campos no existen en la tabla Proveedor
+    @Transient
     private String phone;
+    
+    @Transient
     private String address;
+    
+    @Transient
     private String description;
 
     // Getters and Setters
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
